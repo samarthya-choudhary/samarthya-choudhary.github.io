@@ -125,17 +125,29 @@
 
   function displayFamilyHistory(familyHistories) {
     var tbody = $('#familyHistory tbody');
-    tbody.empty();
-  
+    tbody.empty(); 
+
+    if (!familyHistories) {
+        console.log('No family histories provided');
+        return;
+    }
+
     familyHistories.forEach(function(history) {
-      var status = history.resource.status;
-      var relationship = history.resource.relationship.text;
-      var deceased = history.resource.deceasedBoolean ? 'Yes' : 'No';
-      tbody.append(
-        '<tr><td>' + relationship + '</td><td>' + status + '</td><td>' + deceased + '</td></tr>'
-      );
+        if (!history || !history.resource) {
+            console.log('Invalid history entry', history);
+            return; 
+        }
+
+        var status = history.resource.status || 'Unknown'; 
+        var relationship = (history.resource.relationship && history.resource.relationship.text) ? history.resource.relationship.text : 'Not specified';
+        var deceased = (typeof history.resource.deceasedBoolean === 'boolean') ? (history.resource.deceasedBoolean ? 'Yes' : 'No') : 'Unknown';
+
+        tbody.append(
+            '<tr><td>' + relationship + '</td><td>' + status + '</td><td>' + deceased + '</td></tr>'
+        );
     });
-  }
+}
+
   
 
   window.drawVisualization = function(p) {
