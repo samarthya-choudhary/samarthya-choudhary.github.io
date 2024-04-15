@@ -1,6 +1,3 @@
-const { query } = require("express");
-const { type } = require("os");
-
 (function(window){
   window.extractData = function() {
     var ret = $.Deferred();
@@ -25,12 +22,12 @@ const { type } = require("os");
                     }
                   });
 
-        // var familyMemberHistory = smart.patient.api.fetchAll({
-        //   type: 'FamilyMemberHistory',
-        //   query: {patient: pt.id}
-        // });
+        var familyMemberHistory = smart.patient.api.fetchAll({
+          type: 'FamilyMemberHistory',
+          query: {patient: pt.id}
+        });
 
-        // console.log(familyMemberHistory);
+        console.log(familyMemberHistory);
 
         $.when(pt, obv).fail(onError);
 
