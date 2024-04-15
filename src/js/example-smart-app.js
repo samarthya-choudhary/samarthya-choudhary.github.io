@@ -31,7 +31,7 @@
 
         $.when(pt, obv, familyMemberHistory).fail(onError);
 
-        $.when(pt, obv).done(function(patient, obv) {
+        $.when(pt, obv, familyMemberHistory).done(function(patient, obv, familyHistories) {
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
