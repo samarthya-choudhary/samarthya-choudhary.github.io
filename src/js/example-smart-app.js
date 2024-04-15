@@ -133,14 +133,14 @@
     }
 
     familyHistories.forEach(function(history) {
-        if (!history || !history.resource) {
+        if (!history) {
             console.log('Invalid history entry', history);
             return; 
         }
 
-        var status = history.resource.status || 'Unknown'; 
-        var relationship = (history.resource.relationship && history.resource.relationship.text) ? history.resource.relationship.text : 'Not specified';
-        var deceased = (typeof history.resource.deceasedBoolean === 'boolean') ? (history.resource.deceasedBoolean ? 'Yes' : 'No') : 'Unknown';
+        var status = history.status || 'Unknown'; 
+        var relationship = (history.relationship && history.relationship.text) ? history.relationship.text : 'Not specified';
+        var deceased = (typeof history.deceasedBoolean === 'boolean') ? (history.deceasedBoolean ? 'Yes' : 'No') : 'Unknown';
 
         tbody.append(
             '<tr><td>' + relationship + '</td><td>' + status + '</td><td>' + deceased + '</td></tr>'
