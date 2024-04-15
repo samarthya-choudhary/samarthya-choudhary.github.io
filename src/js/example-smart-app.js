@@ -1,3 +1,6 @@
+const { query } = require("express");
+const { type } = require("os");
+
 (function(window){
   window.extractData = function() {
     var ret = $.Deferred();
@@ -21,6 +24,13 @@
                       }
                     }
                   });
+
+        var familyMemberHistory = smart.patient.api.fetchAll({
+          type: 'FamilyMemberHistory',
+          query: {patient: pt.id}
+        })
+
+        console.log(familyMemberHistory);
 
         $.when(pt, obv).fail(onError);
 
