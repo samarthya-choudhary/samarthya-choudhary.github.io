@@ -29,7 +29,7 @@
 
         console.log(familyMemberHistory);
 
-        $.when(pt, obv).fail(onError);
+        $.when(pt, obv, familyMemberHistory).fail(onError);
 
         $.when(pt, obv).done(function(patient, obv) {
           var byCodes = smart.byCodes(obv, 'code');
@@ -66,6 +66,8 @@
 
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
+
+          displayFamilyHistory(familyHistories);
 
           ret.resolve(p);
         });
@@ -120,6 +122,21 @@
       return undefined;
     }
   }
+
+  function displayFamilyHistory(familyHistories) {
+    var tbody = $('#familyHistory tbody');
+    tbody.empty();
+  
+    familyHistories.forEach(function(history) {
+      var status = history.resource.status;
+      var relationship = history.resource.relationship.text;
+      var deceased = history.resource.deceasedBoolean ? 'Yes' : 'No';
+      tbody.append(
+        '<tr><td>' + relationship + '</td><td>' + status + '</td><td>' + deceased + '</td></tr>'
+      );
+    });
+  }
+  
 
   window.drawVisualization = function(p) {
     $('#holder').show();
