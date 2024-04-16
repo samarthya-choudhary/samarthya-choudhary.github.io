@@ -144,6 +144,7 @@
       var sex = history.sex?.text || 'Unknown';
       // var conditions = (history.condition && history.condition.length > 0) ? history.condition : "Conditions not available";
       var conditionDetails = '';
+      var name = history?.name || 'Unknown';
 
       if (history.condition && history.condition.length > 0) {
         history.condition.forEach(function (condition) {
@@ -160,7 +161,7 @@
 
 
       tbody.append(
-        '<tr><td>' + relationship + '</td><td>' + sex + '</td><td>' + status + '</td><td>' + deceased + '</td><td>' + conditionDetails + '</td></tr>'
+        '<tr><td>' + name + '</td><td>' + relationship + '</td><td>' + sex + '</td><td>' + status + '</td><td>' + deceased + '</td><td>' + conditionDetails + '</td></tr>'
       );
     });
   }
