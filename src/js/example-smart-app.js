@@ -1,5 +1,5 @@
-(function(window){
-  window.extractData = function() {
+(function (window) {
+  window.extractData = function () {
     var ret = $.Deferred();
 
     function onError() {
@@ -7,31 +7,31 @@
       ret.reject();
     }
 
-    function onReady(smart)  {
+    function onReady(smart) {
       if (smart.hasOwnProperty('patient')) {
         var patient = smart.patient;
         var pt = patient.read();
         var obv = smart.patient.api.fetchAll({
-                    type: 'Observation',
-                    query: {
-                      code: {
-                        $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
-                              'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
-                              'http://loinc.org|2089-1', 'http://loinc.org|55284-4']
-                      }
-                    }
-                  });
+          type: 'Observation',
+          query: {
+            code: {
+              $or: ['http://loinc.org|8302-2', 'http://loinc.org|8462-4',
+                'http://loinc.org|8480-6', 'http://loinc.org|2085-9',
+                'http://loinc.org|2089-1', 'http://loinc.org|55284-4']
+            }
+          }
+        });
 
         var familyMemberHistory = smart.patient.api.fetchAll({
           type: 'FamilyMemberHistory',
-          query: {patient: pt.id}
+          query: { patient: pt.id }
         });
 
         console.log(familyMemberHistory);
 
         $.when(pt, obv, familyMemberHistory).fail(onError);
 
-        $.when(pt, obv, familyMemberHistory).done(function(patient, obv, familyHistories) {
+        $.when(pt, obv, familyMemberHistory).done(function (patient, obv, familyHistories) {
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
@@ -44,8 +44,8 @@
           }
 
           var height = byCodes('8302-2');
-          var systolicbp = getBloodPressureValue(byCodes('55284-4'),'8480-6');
-          var diastolicbp = getBloodPressureValue(byCodes('55284-4'),'8462-4');
+          var systolicbp = getBloodPressureValue(byCodes('55284-4'), '8480-6');
+          var diastolicbp = getBloodPressureValue(byCodes('55284-4'), '8462-4');
           var hdl = byCodes('2085-9');
           var ldl = byCodes('2089-1');
 
@@ -56,7 +56,7 @@
           p.lname = lname;
           p.height = getQuantityValueAndUnit(height[0]);
 
-          if (typeof systolicbp != 'undefined')  {
+          if (typeof systolicbp != 'undefined') {
             p.systolicbp = systolicbp;
           }
 
@@ -81,25 +81,25 @@
 
   };
 
-  function defaultPatient(){
+  function defaultPatient() {
     return {
-      fname: {value: ''},
-      lname: {value: ''},
-      gender: {value: ''},
-      birthdate: {value: ''},
-      height: {value: ''},
-      systolicbp: {value: ''},
-      diastolicbp: {value: ''},
-      ldl: {value: ''},
-      hdl: {value: ''},
+      fname: { value: '' },
+      lname: { value: '' },
+      gender: { value: '' },
+      birthdate: { value: '' },
+      height: { value: '' },
+      systolicbp: { value: '' },
+      diastolicbp: { value: '' },
+      ldl: { value: '' },
+      hdl: { value: '' },
     };
   }
 
   function getBloodPressureValue(BPObservations, typeOfPressure) {
     var formattedBPObservations = [];
-    BPObservations.forEach(function(observation){
-      var BP = observation.component.find(function(component){
-        return component.code.coding.find(function(coding) {
+    BPObservations.forEach(function (observation) {
+      var BP = observation.component.find(function (component) {
+        return component.code.coding.find(function (coding) {
           return coding.code == typeOfPressure;
         });
       });
@@ -114,10 +114,10 @@
 
   function getQuantityValueAndUnit(ob) {
     if (typeof ob != 'undefined' &&
-        typeof ob.valueQuantity != 'undefined' &&
-        typeof ob.valueQuantity.value != 'undefined' &&
-        typeof ob.valueQuantity.unit != 'undefined') {
-          return ob.valueQuantity.value + ' ' + ob.valueQuantity.unit;
+      typeof ob.valueQuantity != 'undefined' &&
+      typeof ob.valueQuantity.value != 'undefined' &&
+      typeof ob.valueQuantity.unit != 'undefined') {
+      return ob.valueQuantity.value + ' ' + ob.valueQuantity.unit;
     } else {
       return undefined;
     }
@@ -125,32 +125,49 @@
 
   function displayFamilyHistory(familyHistories) {
     var tbody = $('#familyHistory tbody');
-    tbody.empty(); 
+    tbody.empty();
 
     if (!familyHistories) {
-        console.log('No family histories provided');
-        return;
+      console.log('No family histories provided');
+      return;
     }
 
-    familyHistories.forEach(function(history) {
-        if (!history) {
-            console.log('Invalid history entry', history);
-            return; 
-        }
+    familyHistories.forEach(function (history) {
+      if (!history) {
+        console.log('Invalid history entry', history);
+        return;
+      }
 
-        var status = history.status || 'Unknown'; 
-        var relationship = (history.relationship && history.relationship.text) ? history.relationship.text : 'Not specified';
-        var deceased = (typeof history.deceasedBoolean === 'boolean') ? (history.deceasedBoolean ? 'Yes' : 'No') : 'Unknown';
+      var status = history.status || 'Unknown';
+      var relationship = (history.relationship && history.relationship.text) ? history.relationship.text : 'Not specified';
+      var deceased = (typeof history.deceasedBoolean === 'boolean') ? (history.deceasedBoolean ? 'Yes' : 'No') : 'Unknown';
+      var sex = (history.sex.text) ? history.sex.text : 'Unknown';
+      // var conditions = (history.condition && history.condition.length > 0) ? history.condition : "Conditions not available";
+      var conditionDetails = '';
 
-        tbody.append(
-            '<tr><td>' + relationship + '</td><td>' + status + '</td><td>' + deceased + '</td></tr>'
-        );
+      if (history.condition && history.condition.length > 0) {
+        history.condition.forEach(function (condition) {
+          var conditionText = condition.code && condition.code.text ? condition.code.text : 'Unknown condition';
+          var positiveOrNegative = condition.modifierExtension && condition.modifierExtension.length > 0 && condition.modifierExtension[0].valueCodeableConcept
+            ? condition.modifierExtension[0].valueCodeableConcept.text : 'Result not specified';
+          var ageOfOnset = condition.onsetAge ? condition.onsetAge.value + ' ' + condition.onsetAge.unit : 'Age of onset not specified';
+
+          conditionDetails += conditionText + ' (' + positiveOrNegative + '), ' + ageOfOnset + '; ';
+        });
+      } else {
+        conditionDetails = 'No conditions reported';
+      }
+
+
+      tbody.append(
+        '<tr><td>' + relationship + '</td><td>' + sex + '</td><td>' + status + '</td><td>' + deceased + '</td><td>' + conditionDetails + '</td></tr>'
+      );
     });
-}
+  }
 
-  
 
-  window.drawVisualization = function(p) {
+
+  window.drawVisualization = function (p) {
     $('#holder').show();
     $('#loading').hide();
     $('#fname').html(p.fname);
