@@ -141,7 +141,7 @@
       var status = history.status || 'Unknown';
       var relationship = (history.relationship && history.relationship.text) ? history.relationship.text : 'Not specified';
       var deceased = (typeof history.deceasedBoolean === 'boolean') ? (history.deceasedBoolean ? 'Yes' : 'No') : 'Unknown';
-      var sex = (history.sex.text) ? history.sex.text : 'Unknown';
+      var sex = history.sex?.text || 'Unknown';
       // var conditions = (history.condition && history.condition.length > 0) ? history.condition : "Conditions not available";
       var conditionDetails = '';
 
