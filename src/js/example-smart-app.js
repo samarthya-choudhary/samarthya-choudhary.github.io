@@ -166,6 +166,64 @@
     });
   }
 
+  // window.submitLabOrder = function () {
+  //   var patientId = FHIR.oauth2.client().patient.id; 
+
+  //   var diagnosticReportData = {
+  //     resourceType: "DiagnosticReport",
+  //     status: "final",
+  //     category: {
+  //       coding: [{
+  //         code: "LP29708-2",
+  //         display: "Cardiology",
+  //         system: "http://loinc.org"
+  //       }]
+  //     },
+  //     code: {
+  //       coding: [{
+  //         code: "703535",
+  //         system: "https://fhir.cerner.com/ec2458f2-1e24-41c8-b71b-0e701af7583d/codeSet/72",
+  //         display: "Temperature Axillary"
+  //       }],
+  //       text: "Cardiology"
+  //     },
+  //     subject: {
+  //       reference: "Patient/" + patientId
+  //     },
+  //     performer: [{
+  //       reference: "Practitioner/3332064"
+  //     }],
+  //     effectivePeriod: {
+  //       start: "2020-09-14T09:05:12.000Z",
+  //       end: "2020-09-14T09:05:12.000Z"
+  //     },
+  //     presentedForm: [{
+  //       contentType: "application/pdf;charset=utf-8",
+  //       data: "BASE64_ENCODED_DATA_HERE", 
+  //       title: "Diagnostic Report",
+  //       creation: new Date().toISOString()
+  //     }]
+  //   };
+
+  //   $.ajax({
+  //     url: 'https://fhir-ehr.cerner.com/r4/ec2458f2-1e24-41c8-b71b-0e701af7583d/DiagnosticReport',
+  //     type: 'POST',
+  //     headers: {
+  //       'Authorization': 'Bearer YOUR_OAUTH_TOKEN_HERE', 
+  //       'Content-Type': 'application/fhir+json'
+  //     },
+  //     data: JSON.stringify(diagnosticReportData),
+  //     success: function (response) {
+  //       console.log('Diagnostic Report Created:', response);
+  //       alert('Lab order submitted and diagnostic report generated successfully!');
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error('Failed to create diagnostic report:', error);
+  //       alert('Failed to submit lab order and generate report.');
+  //     }
+  //   });
+  // }
+
 
 
   window.drawVisualization = function (p) {
