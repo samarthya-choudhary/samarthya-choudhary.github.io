@@ -9,10 +9,15 @@
 
     function onReady(smart) {
       if (smart.hasOwnProperty('patient')) {
-        console.log(smart, 'smart');
-        console.log(smart.server.auth.token);
+        var authToken = smart.server.auth.token;
+        var patientId = smart.patient.id;
+        var providerId = smart.tokenResponse.user;
+
+        console.log('Patient ID:', patientId);
+        console.log('Provider ID:', providerId);
+        console.log('Auth Token:', authToken);
+        
         var patient = smart.patient;
-        console.log(patient, 'patient');
         var pt = patient.read();
         var obv = smart.patient.api.fetchAll({
           type: 'Observation',
