@@ -12,7 +12,7 @@
         var authToken = smart.server.auth.token;
         var patientId = smart.patient.id;
         var providerId = smart.tokenResponse.user;
-        const baseUrl = "http://localhost:3000";
+        const baseUrl = "https://35a5-103-167-185-2.ngrok-free.app";
 
         console.log("Patient ID:", patientId);
         console.log("Provider ID:", providerId);
@@ -34,7 +34,7 @@
         let phone;
 
         const data = fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-patient-data/" + patientId,
+          baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId,
           requestOptions,
         )
           .then((response) => response.text())
