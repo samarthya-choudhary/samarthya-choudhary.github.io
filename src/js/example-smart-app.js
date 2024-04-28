@@ -27,43 +27,22 @@
           },
         };
 
-        let name;
-        let gender;
-        let birthDate;
-        let address;
-        let phone = 676;
-
-        const data = fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId,
-          requestOptions,
-        )
-          .then((response) => response.text())
-          .then((result) => console.log(result))
-          .catch((error) => console.error(error));
-
-        name = data.Name;
-        gender = data.Gender;
-        birthDate = data.BirthDate;
-        address = data.Addresses;
-
-        const nameElement = document.getElementById("patient-name");
-
-        nameElement.innerHTML = name;
-
-        $("#patient-name").text(name || "Unknown");
-        $("#holder").show();
-
-        // fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
-        // .then(response => response.json())
-        // .then(data => {
-        //     updatePatientFields(data);
-        // })
-        // .catch(error => {
-        //     console.error("Error fetching patient data:", error);
-        //     onError();
-        // });
+        fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
+          .then(response => response.json()) // Assuming the API returns JSON data
+          .then(data => {
+            console.log("Fetched data:", data);  // Data is now an object
+            updatePatientFields(data);
+            $("#holder").show();
+            ret.resolve(data); // Resolving deferred object with data
+          })
+          .catch(error => {
+            console.error("Error fetching patient data:", error);
+            onError();
+            ret.reject(error);
+          });
       } else {
         onError();
+        ret.reject(new Error("Smart does not have a patient property"));
       }
     }
 
@@ -72,14 +51,14 @@
   };
 
   function updatePatientFields(data) {
-    // Assuming 'data' is an object with patient information
     $("#patient-name").text(data.Name || "Unknown");
     $("#patient-dob").text(data.BirthDate || "Unknown");
     $("#patient-sex").text(data.Gender || "Unknown");
     $("#patient-address").text(data.Address || "Unknown");
     $("#patient-phone").text(data.Phone || "Unknown");
-    // Add other fields similarly...
+    // Update other fields as necessary
   }
+
   window.drawVisualization = function (p) {
     $("#holder").show();
     $("#loading").hide();
