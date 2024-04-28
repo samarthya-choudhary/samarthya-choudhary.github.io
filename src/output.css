@@ -1888,14 +1888,14 @@ body {
   background-color: #3537E84D;
 }
 
-.bg-white{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
 .bg-black{
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.bg-white{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .decoration-slice{
@@ -2012,20 +2012,20 @@ body {
   padding: 0.25rem;
 }
 
-.p-6{
-  padding: 1.5rem;
-}
-
-.p-8{
-  padding: 2rem;
+.p-2{
+  padding: 0.5rem;
 }
 
 .p-3{
   padding: 0.75rem;
 }
 
-.p-2{
-  padding: 0.5rem;
+.p-6{
+  padding: 1.5rem;
+}
+
+.p-8{
+  padding: 2rem;
 }
 
 .px-3{
@@ -2038,6 +2038,11 @@ body {
   padding-right: 1rem;
 }
 
+.px-6{
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
 .py-1{
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -2048,19 +2053,9 @@ body {
   padding-bottom: 0.5rem;
 }
 
-.px-20{
-  padding-left: 5rem;
-  padding-right: 5rem;
-}
-
 .py-3{
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-}
-
-.px-6{
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
 }
 
 .text-left{
@@ -2128,6 +2123,11 @@ body {
   line-height: 2rem;
 }
 
+.text-base{
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .text-lg{
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -2143,13 +2143,12 @@ body {
   line-height: 1rem;
 }
 
-.text-base{
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
 .font-bold{
   font-weight: 700;
+}
+
+.font-medium{
+  font-weight: 500;
 }
 
 .font-normal{
@@ -2158,10 +2157,6 @@ body {
 
 .font-semibold{
   font-weight: 600;
-}
-
-.font-medium{
-  font-weight: 500;
 }
 
 .uppercase{

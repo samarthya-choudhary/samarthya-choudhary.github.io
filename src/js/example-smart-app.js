@@ -31,7 +31,7 @@
         let gender;
         let birthDate;
         let address;
-        let phone;
+        let phone = 676;
 
         const data = fetch(
           baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId,
@@ -45,7 +45,7 @@
         gender = data.Gender;
         birthDate = data.BirthDate;
         address = data.Addresses;
-        phone = data.ContactNumbers[0].Number;
+        // phone = data.ContactNumbers[0].Number;
 
         const nameTag = document.getElementById("patient-name");
         const genderTag = document.getElementById("patient-sex");
