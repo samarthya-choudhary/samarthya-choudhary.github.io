@@ -28,12 +28,12 @@
         };
 
         fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
-          .then(response => response.json()) // Assuming the API returns JSON data
+          .then(response => response.json()) 
           .then(data => {
-            console.log("Fetched data:", data);  // Data is now an object
+            console.log("Fetched data:", data);  
             updatePatientFields(data);
             $("#holder").show();
-            ret.resolve(data); // Resolving deferred object with data
+            ret.resolve(data); 
           })
           .catch(error => {
             console.error("Error fetching patient data:", error);
@@ -54,9 +54,8 @@
     $("#patient-name").text(data.Name || "Unknown");
     $("#patient-dob").text(data.BirthDate || "Unknown");
     $("#patient-sex").text(data.Gender || "Unknown");
-    $("#patient-address").text(data.Address || "Unknown");
-    $("#patient-phone").text(data.Phone || "Unknown");
-    // Update other fields as necessary
+    $("#patient-address").text(data.Addresses[0] || "Unknown");
+    $("#patient-phone").text(data.ContactNumbers[0].Number || "Unknown");
   }
 
   window.drawVisualization = function (p) {
