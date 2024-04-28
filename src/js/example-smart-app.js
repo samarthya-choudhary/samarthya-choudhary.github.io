@@ -12,7 +12,7 @@
         var authToken = smart.server.auth.token;
         var patientId = smart.patient.id;
         var providerId = smart.tokenResponse.user;
-        const baseUrl = "https://35a5-103-167-185-2.ngrok-free.app";
+        const baseUrl = "http://localhost:3000";
 
         console.log("Patient ID:", patientId);
         console.log("Provider ID:", providerId);
