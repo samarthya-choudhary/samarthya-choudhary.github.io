@@ -129,7 +129,7 @@
 
         //   displayFamilyHistory(familyHistories);
 
-          ret.resolve(p);
+          // ret.resolve(p);
         // });
       } else {
         onError();
