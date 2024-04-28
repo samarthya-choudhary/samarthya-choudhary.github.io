@@ -30,7 +30,8 @@
         fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
           .then(response => response.json()) 
           .then(data => {
-            console.log("Fetched data:", data);  
+            console.log("Fetched data:", data);
+            data.patientId = patientId;  
             updatePatientFields(data);
             $("#holder").show();
             ret.resolve(data); 
@@ -56,6 +57,7 @@
     $("#patient-sex").text(data.Gender || "Unknown");
     $("#patient-address").text(data.Addresses[0] || "Unknown");
     $("#patient-phone").text(data.ContactNumbers[0].Number || "Unknown");
+    $("#patient-id").text(data.patientId || "Unknown");
   }
 
   window.drawVisualization = function (p) {
