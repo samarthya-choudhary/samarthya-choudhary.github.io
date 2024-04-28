@@ -1,108 +1,338 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Example-SMART-App</title>
 
-<head>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-  <title>Example-SMART-App</title>
-
-  <link rel='stylesheet' type='text/css' href='./src/css/example-smart-app.css'>
-  <!--
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./src/css/example-smart-app.css"
+    />
+    <link rel="stylesheet" href="./src/output.css" />
+    <!--
       Temporarily disable cerner-smart-embeddable-lib
       <link rel='stylesheet' type='text/css' href='./lib/css/cerner-smart-embeddable-lib-1.0.0.min.css'>
     -->
-</head>
+  </head>
 
-<body>
-  <div id='errors'>
-  </div>
-  <div id="loading" class="spinner">
+  <body class="bg-azo_gray">
+    <div id="errors"></div>
+    <div id="loading" class="spinner">
     <div class="bounce1"></div>
     <div class="bounce2"></div>
     <div class="bounce3"></div>
   </div>
-  <div id='holder'>
-    <h2>Example-SMART-App</h2>
-
-    <h2>Patient Resource</h2>
-    <table>
-      <tr>
-        <th>First Name:</th>
-        <td id='fname'></td>
-      </tr>
-      <tr>
-        <th>Last Name:</th>
-        <td id='lname'></td>
-      </tr>
-      <tr>
-        <th>Gender:</th>
-        <td id='gender'></td>
-      </tr>
-      <tr>
-        <th>Date of Birth:</th>
-        <td id='birthdate'></td>
-      </tr>
-    </table>
-    <h2>Observation Resource</h2>
-    <table>
-      <tr>
-        <th>Height:</th>
-        <td id='height'></td>
-      </tr>
-      <tr>
-        <th>Systolic Blood Pressure:</th>
-        <td id='systolicbp'></td>
-
-      </tr>
-      <tr>
-        <th>Diastolic Blood Pressure:</th>
-        <td id='diastolicbp'></td>
-      </tr>
-      <tr>
-        <th>LDL:</th>
-        <td id='ldl'></td>
-      </tr>
-      <tr>
-        <th>HDL:</th>
-        <td id='hdl'></td>
-      </tr>
-    </table>
-    <h2>Family Member History</h2>
-    <table id="familyHistory">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Relation</th>
-          <th>Sex</th>
-          <th>Status</th>
-          <th>Deceased</th>
-          <th>Conditions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Family member history entries will be dynamically filled here -->
-      </tbody>
-    </table>
-    <!-- <button id="submitLabOrderBtn" onclick="submitLabOrder()">Submit Lab Order and Generate Report</button> -->
-  </div>
-  <!-- Required JS files to enable this page to embed within an MPage -->
-  <!--
+    <div id="holder" class="">
+      <div class="p-8">
+        <h1 class="text-2xl font-semibold">Lab Order Interaction</h1>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Patient Information (from EMR Patient Chart)
+          </h1>
+          <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Patient Name</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-name-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-name-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-name"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                Peter
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Date of Birth</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-dob-label"
+                >
+                  <h2 class="text-xs font-normal text-azo_darkPurple">EMR</h2>
+                </div>
+              </div>
+              <h1
+                id="patient-dob"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                26-05-2001
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Sex at Birth</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-sex-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-sex-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-sex"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                Male
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Address</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-address-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-address-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-address"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                123, XYZ Street, ABC City
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Patient ID</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-id-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-id-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-id"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                224454
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy Number</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-policy-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-policy-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-policy"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                123456
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Insurance Number</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-insurance-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-insurance-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-insurance"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                1234562
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Phone Number</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-phone-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-phone-label-text"
+                  >
+                    EMR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-phone"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                +1 2299962466
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Patient Family History ( from EMR )
+          </h1>
+          <table class="table-auto border-collapse">
+            <tr class="border-b">
+              <th class="px-4 py-2">Name</th>
+              <th class="px-4 py-2">Relation</th>
+              <th class="px-4 py-2">Condition</th>
+            </tr>
+            <tr class="border-b bg-white">
+              <td class="px-4 py-2">John Doe</td>
+              <td class="px-4 py-2">Father</td>
+              <td class="px-4 py-2">Diabetes</td>
+            </tr>
+            <tr class="border-b bg-white">
+              <td class="px-4 py-2">John Doe</td>
+              <td class="px-4 py-2">Father</td>
+              <td class="px-4 py-2">Diabetes</td>
+            </tr>
+          </table>
+        </div>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Patient Answered Questionnaire (from external system)
+          </h1>
+          <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
+            <div class="">
+              <h1 class="text-sm font-normal">You have any Algiers?</h1>
+              <h1 id="q-1" class="mt-2 text-lg font-normal text-azo_darkGray">
+                Penicillin
+              </h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">
+                What is your current medications?
+              </h1>
+              <h1 id="q-2" class="mt-2 text-lg font-normal text-azo_darkGray">
+                Penicillin
+              </h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">Previous Lab Result</h1>
+              <h1 id="q-3" class="mt-2 text-lg font-normal text-azo_darkGray">
+                Penicillin#123
+              </h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">What is your reason for test?</h1>
+              <h1 id="q-4" class="mt-2 text-lg font-normal text-azo_darkGray">
+                23#SDFSA
+              </h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">Patient First Name</h1>
+              <h1 id="q-5" class="mt-2 text-lg font-normal text-azo_darkGray">
+                Smith
+              </h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">Patient Last Name</h1>
+              <h1 id="q-6" class="mt-2 text-lg font-normal text-azo_darkGray">
+                John
+              </h1>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Provider Order Submission Input (stored in EMR and/or external
+            system)
+          </h1>
+          <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
+            <div class="">
+              <h1 class="text-sm font-normal">Provider Name</h1>
+              <h1 id="p-1" class="mt-2 text-lg font-normal text-azo_darkGray">
+                Cristofer Philips
+              </h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">Provider ID</h1>
+              <h1 id="p-3" class="mt-2 text-lg font-normal text-azo_darkGray">
+                22444554
+              </h1>
+            </div>
+            <div class="col-span-3">
+              <h1 class="text-sm font-normal">Provider Notes</h1>
+              <textarea
+                id="p-2"
+                class="mt-2 h-24 w-full rounded-lg p-2 text-lg font-normal text-azo_darkGray ring-1 ring-[#919BF3]"
+                placeholder="Enter notes here"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full items-center justify-end gap-8 mt-8">
+          <button
+            class="rounded-md border border-black px-6 py-3 font-inter text-base font-medium"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="rounded-md bg-black px-6 py-3 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Submit Lab Order
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Required JS files to enable this page to embed within an MPage -->
+    <!--
       Temporarily disable cerner-smart-embeddable-lib
       <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js'></script>
       <script src='./lib/js/cerner-smart-embeddable-lib-1.0.0.min.js'></script>
     -->
 
-  <!-- Application-level javascript-->
-  <script src='./src/js/example-smart-app.js'></script>
+    <!-- Application-level javascript-->
+    <script src="./src/js/example-smart-app.js"></script>
 
-  <!-- FHIR Client JS Library -->
-  <script src='./lib/js/fhir-client-v0.1.12.js'></script>
+    <!-- FHIR Client JS Library -->
+    <script src="./lib/js/fhir-client-v0.1.12.js"></script>
 
-  <!-- Prevent session bleed caused by single threaded embedded browser and sessionStorage API -->
-  <!-- https://github.com/cerner/fhir-client-cerner-additions -->
-  <script src='./lib/js/fhir-client-cerner-additions-1.0.0.js'></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script>
+    <!-- Prevent session bleed caused by single threaded embedded browser and sessionStorage API -->
+    <!-- https://github.com/cerner/fhir-client-cerner-additions -->
+    <script src="./lib/js/fhir-client-cerner-additions-1.0.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
     extractData().then(
       //Display Patient Demographics and Observations if extractData was success
       function (p) {
@@ -116,6 +346,5 @@
       }
     );
   </script>
-</body>
-
+  </body>
 </html>
