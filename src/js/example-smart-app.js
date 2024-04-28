@@ -46,15 +46,22 @@
         birthDate = data.BirthDate;
         address = data.Addresses;
 
-        fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
-        .then(response => response.json()) 
-        .then(data => {
-            updatePatientFields(data);  
-        })
-        .catch(error => {
-            console.error("Error fetching patient data:", error);
-            onError(); 
-        });
+        const nameElement = document.getElementById("patient-name");
+
+        nameElement.innerHTML = name;
+
+        $("#patient-name").text(name || "Unknown");
+        $("#holder").show();
+
+        // fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
+        // .then(response => response.json())
+        // .then(data => {
+        //     updatePatientFields(data);
+        // })
+        // .catch(error => {
+        //     console.error("Error fetching patient data:", error);
+        //     onError();
+        // });
       } else {
         onError();
       }
@@ -66,13 +73,13 @@
 
   function updatePatientFields(data) {
     // Assuming 'data' is an object with patient information
-    $("#patient-name").text(data.Name || 'Unknown');
-    $("#patient-dob").text(data.BirthDate || 'Unknown');
-    $("#patient-sex").text(data.Gender || 'Unknown');
-    $("#patient-address").text(data.Address || 'Unknown');
-    $("#patient-phone").text(data.Phone || 'Unknown');
+    $("#patient-name").text(data.Name || "Unknown");
+    $("#patient-dob").text(data.BirthDate || "Unknown");
+    $("#patient-sex").text(data.Gender || "Unknown");
+    $("#patient-address").text(data.Address || "Unknown");
+    $("#patient-phone").text(data.Phone || "Unknown");
     // Add other fields similarly...
-}
+  }
   window.drawVisualization = function (p) {
     $("#holder").show();
     $("#loading").hide();
