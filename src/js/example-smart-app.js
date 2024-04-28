@@ -45,19 +45,29 @@
         gender = data.Gender;
         birthDate = data.BirthDate;
         address = data.Addresses;
+
+        fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
+        .then(response => response.json()) 
+        .then(data => {
+            updatePatientFields(data);  
+        })
+        .catch(error => {
+            console.error("Error fetching patient data:", error);
+            onError(); 
+        });
         // phone = data.ContactNumbers[0].Number;
 
-        const nameTag = document.getElementById("patient-name");
-        const genderTag = document.getElementById("patient-sex");
-        const birthDateTag = document.getElementById("patient-dob");
-        const addressTag = document.getElementById("patient-address");
-        const phoneTag = document.getElementById("patient-phone");
+        // const nameTag = document.getElementById("patient-name");
+        // const genderTag = document.getElementById("patient-sex");
+        // const birthDateTag = document.getElementById("patient-dob");
+        // const addressTag = document.getElementById("patient-address");
+        // const phoneTag = document.getElementById("patient-phone");
 
-        nameTag.innerHTML = name;
-        genderTag.innerHTML = gender;
-        birthDateTag.innerHTML = birthDate;
-        addressTag.innerHTML = address;
-        phoneTag.innerHTML = phone;
+        // nameTag.innerHTML = name;
+        // genderTag.innerHTML = gender;
+        // birthDateTag.innerHTML = birthDate;
+        // addressTag.innerHTML = address;
+        // phoneTag.innerHTML = phone;
 
         // var patient = smart.patient;
         // var pt = patient.read();
@@ -129,6 +139,16 @@
     FHIR.oauth2.ready(onReady, onError);
     return ret.promise();
   };
+
+  function updatePatientFields(data) {
+    // Assuming 'data' is an object with patient information
+    $("#patient-name").text(data.Name || 'Unknown');
+    $("#patient-dob").text(data.BirthDate || 'Unknown');
+    $("#patient-sex").text(data.Gender || 'Unknown');
+    $("#patient-address").text(data.Address || 'Unknown');
+    $("#patient-phone").text(data.Phone || 'Unknown');
+    // Add other fields similarly...
+}
 
   function defaultPatient() {
     return {
