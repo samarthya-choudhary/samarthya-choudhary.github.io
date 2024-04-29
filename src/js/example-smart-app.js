@@ -81,7 +81,6 @@
           baseUrl +
             "/api/smart-on-fhir/external-system/questionnaire-response/",
           patientId,
-          requestOptions,
         )
           .then((response) => response.json())
           .then((data) => {
