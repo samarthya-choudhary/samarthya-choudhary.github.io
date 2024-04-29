@@ -157,7 +157,7 @@
   }
 
   function updateProviderFields(data, providerId) {
-    $("#p1").text(data[0].Name || "Unknown");
+    $("#p1").text(data.Name || "Unknown");
     $("#p2").text(providerId || "Unknown");
   }
 
