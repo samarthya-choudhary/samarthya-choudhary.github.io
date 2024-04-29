@@ -79,8 +79,8 @@
 
         fetch(
           baseUrl +
-            "/api/smart-on-fhir/external-system/questionnaire-response/",
-          patientId,
+            "/api/smart-on-fhir/external-system/questionnaire-response/" +
+            patientId,
         )
           .then((response) => response.json())
           .then((data) => {
