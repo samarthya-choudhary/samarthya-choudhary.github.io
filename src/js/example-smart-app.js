@@ -93,6 +93,22 @@
             onError();
             ret.reject(error);
           });
+
+        fetch(
+          baseUrl + "/api/smart-on-fhir/ehr-data/practitioner/" + providerId,
+          requestOptions,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched Provider data:", data);
+            updateProviderFields(data, providerId);
+            ret.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching provider data:", error);
+            onError();
+            ret.reject(error);
+          });
       } else {
         onError();
         ret.reject(new Error("Smart does not have a patient property"));
@@ -138,6 +154,11 @@
     $("#q-4").text(data[0].reasonResponse || "Unknown");
     $("#q-5").text(data[0].patient.firstName || "Unknown");
     $("#q-6").text(data[0].patient.lastName || "Unknown");
+  }
+
+  function updateProviderFields(data, providerId) {
+    $("#p1").text(data[0].Name || "Unknown");
+    $("#p2").text(providerId || "Unknown");
   }
 
   window.drawVisualization = function (p) {
