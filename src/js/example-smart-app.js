@@ -114,18 +114,33 @@
           });
 
         $("#submit-lab-order").click(function () {
-          fetch(baseUrl + "/api/smart-on-fhir/external-system/lab-order", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              providerNotes: $("#p-3").val(),
-              questionnaireResponseId: questionnaireId,
-              patientId: patientId,
-              providerId: providerId,
-            }),
+          const myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+
+          const raw = JSON.stringify({
+            providerNotes: $("#p-3").val(),
+            questionnaireResponseId: questionnaireId,
+            patientId: patientId,
+            providerId: providerId,
           });
+
+          const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+          };
+
+          fetch(
+            "http://localhost:3000/api/smart-on-fhir/external-system/lab-order",
+            requestOptions,
+          )
+            .then((response) => response.text())
+            .then((result) => {
+              console.log(result);
+              alert("Lab Order Submitted Successfully");
+            })
+            .catch((error) => console.error(error));
         });
       } else {
         onError();
