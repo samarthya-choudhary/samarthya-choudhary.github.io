@@ -27,17 +27,37 @@
           },
         };
 
-        fetch(baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId, requestOptions)
-          .then(response => response.json()) 
-          .then(data => {
+        fetch(
+          baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId,
+          requestOptions,
+        )
+          .then((response) => response.json())
+          .then((data) => {
             console.log("Fetched data:", data);
-            data.patientId = patientId;  
+            data.patientId = patientId;
             updatePatientFields(data);
             $("#holder").show();
-            ret.resolve(data); 
+            ret.resolve(data);
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error fetching patient data:", error);
+            onError();
+            ret.reject(error);
+          });
+
+        fetch(
+          baseUrl + "/api/smart-on-fhir/ehr-coverage-data/" + patientId,
+          requestOptions,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched Policy data:", data);
+            updatePolicyFields(data);
+            $("#holder").show();
+            ret.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching policy data:", error);
             onError();
             ret.reject(error);
           });
@@ -58,6 +78,12 @@
     $("#patient-address").text(data.Addresses[0] || "Unknown");
     $("#patient-phone").text(data.ContactNumbers[0].Number || "Unknown");
     $("#patient-id").text(data.patientId || "Unknown");
+  }
+
+  function updatePolicyFields(data) {
+    $("#patient-policy").text(data[0].id || "Unknown");
+    $("#policy-status").text(data[0].status || "Unknown");
+    $("#policy-payer").text(data[1].payor[0] || "Unknown");
   }
 
   window.drawVisualization = function (p) {

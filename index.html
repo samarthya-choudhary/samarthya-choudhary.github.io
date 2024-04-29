@@ -20,10 +20,10 @@
   <body class="bg-azo_gray">
     <div id="errors"></div>
     <div id="loading" class="spinner">
-    <div class="bounce1"></div>
-    <div class="bounce2"></div>
-    <div class="bounce3"></div>
-  </div>
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
     <div id="holder" class="">
       <div class="p-8">
         <h1 class="text-2xl font-semibold">Lab Order Interaction</h1>
@@ -35,16 +35,11 @@
             <div class="">
               <div class="flex justify-between">
                 <h1 class="text-sm font-normal">Patient Name</h1>
-                <div
-                  class="rounded-full bg-azo_purple px-3 py-1"
-                  id="patient-name-label"
-                >
+                <div class="rounded-full px-3 py-1" id="patient-name-label">
                   <h2
-                    class="text-xs font-normal text-azo_darkPurple"
+                    class="text-xs font-normal"
                     id="patient-name-label-text"
-                  >
-                    EMR
-                  </h2>
+                  ></h2>
                 </div>
               </div>
               <h1
@@ -57,11 +52,11 @@
             <div class="">
               <div class="flex justify-between">
                 <h1 class="text-sm font-normal">Date of Birth</h1>
-                <div
-                  class="rounded-full bg-azo_purple px-3 py-1"
-                  id="patient-dob-label"
-                >
-                  <h2 class="text-xs font-normal text-azo_darkPurple">EMR</h2>
+                <div class="rounded-full px-3 py-1" id="patient-dob-label">
+                  <h2
+                    class="text-xs font-normal"
+                    id="patient-dob-label-text"
+                  ></h2>
                 </div>
               </div>
               <h1
@@ -74,16 +69,11 @@
             <div class="">
               <div class="flex justify-between">
                 <h1 class="text-sm font-normal">Sex at Birth</h1>
-                <div
-                  class="rounded-full bg-azo_purple px-3 py-1"
-                  id="patient-sex-label"
-                >
+                <div class="rounded-full px-3 py-1" id="patient-sex-label">
                   <h2
-                    class="text-xs font-normal text-azo_darkPurple"
+                    class="text-xs font-normal"
                     id="patient-sex-label-text"
-                  >
-                    EMR
-                  </h2>
+                  ></h2>
                 </div>
               </div>
               <h1
@@ -104,7 +94,7 @@
                     class="text-xs font-normal text-azo_darkPurple"
                     id="patient-address-label-text"
                   >
-                    EMR
+                    EHR
                   </h2>
                 </div>
               </div>
@@ -126,7 +116,7 @@
                     class="text-xs font-normal text-azo_darkPurple"
                     id="patient-id-label-text"
                   >
-                    EMR
+                    EHR
                   </h2>
                 </div>
               </div>
@@ -135,50 +125,6 @@
                 class="mt text-lg font-normal text-azo_darkGray"
               >
                 224454
-              </h1>
-            </div>
-            <div class="">
-              <div class="flex justify-between">
-                <h1 class="text-sm font-normal">Policy Number</h1>
-                <div
-                  class="rounded-full bg-azo_purple px-3 py-1"
-                  id="patient-policy-label"
-                >
-                  <h2
-                    class="text-xs font-normal text-azo_darkPurple"
-                    id="patient-policy-label-text"
-                  >
-                    EMR
-                  </h2>
-                </div>
-              </div>
-              <h1
-                id="patient-policy"
-                class="mt text-lg font-normal text-azo_darkGray"
-              >
-                123456
-              </h1>
-            </div>
-            <div class="">
-              <div class="flex justify-between">
-                <h1 class="text-sm font-normal">Insurance Number</h1>
-                <div
-                  class="rounded-full bg-azo_purple px-3 py-1"
-                  id="patient-insurance-label"
-                >
-                  <h2
-                    class="text-xs font-normal text-azo_darkPurple"
-                    id="patient-insurance-label-text"
-                  >
-                    EMR
-                  </h2>
-                </div>
-              </div>
-              <h1
-                id="patient-insurance"
-                class="mt text-lg font-normal text-azo_darkGray"
-              >
-                1234562
               </h1>
             </div>
             <div class="">
@@ -192,7 +138,7 @@
                     class="text-xs font-normal text-azo_darkPurple"
                     id="patient-phone-label-text"
                   >
-                    EMR
+                    EHR
                   </h2>
                 </div>
               </div>
@@ -201,6 +147,72 @@
                 class="mt text-lg font-normal text-azo_darkGray"
               >
                 +1 2299962466
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy ID</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-policy-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-policy-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-policy"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                123456
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy Status</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="policy-status-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="policy-status-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="policy-status"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                1234562
+              </h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy Payer</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="policy-payer-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="policy-payer-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="policy-payer"
+                class="mt text-lg font-normal text-azo_darkGray"
+              >
+                1234562
               </h1>
             </div>
           </div>
@@ -300,7 +312,7 @@
             </div>
           </div>
         </div>
-        <div class="flex w-full items-center justify-end gap-8 mt-8">
+        <div class="mt-8 flex w-full items-center justify-end gap-8">
           <button
             class="rounded-md border border-black px-6 py-3 font-inter text-base font-medium"
           >
@@ -333,18 +345,18 @@
     <script src="./lib/js/fhir-client-cerner-additions-1.0.0.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
-    extractData().then(
-      //Display Patient Demographics and Observations if extractData was success
-      function (p) {
-        drawVisualization(p);
-      },
+      extractData().then(
+        //Display Patient Demographics and Observations if extractData was success
+        function (p) {
+          drawVisualization(p);
+        },
 
-      //Display 'Failed to call FHIR Service' if extractData failed
-      function () {
-        $('#loading').hide();
-        $('#errors').html('<p> Failed to call FHIR Service </p>');
-      }
-    );
-  </script>
+        //Display 'Failed to call FHIR Service' if extractData failed
+        function () {
+          $("#loading").hide();
+          $("#errors").html("<p> Failed to call FHIR Service </p>");
+        },
+      );
+    </script>
   </body>
 </html>
