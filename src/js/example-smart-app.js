@@ -120,8 +120,8 @@
           const raw = JSON.stringify({
             providerNotes: $("#p-3").val(),
             questionnaireResponseId: questionnaireId,
-            patientId: patientId,
-            providerId: providerId,
+            patientId: Number.parseInt(patientId),
+            providerId: Number.parseInt(providerId),
           });
 
           const requestOptions = {
