@@ -46,7 +46,7 @@
           });
 
         fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-coverage-data/" + patientId,
+          baseUrl + "/api/smart-on-fhir/ehr-data/coverage/" + patientId,
           requestOptions,
         )
           .then((response) => response.json())
