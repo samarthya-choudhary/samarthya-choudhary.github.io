@@ -157,8 +157,8 @@
   }
 
   function updateProviderFields(data, providerId) {
-    $("#p1").text(data.name[0].fullName || "Unknown");
-    $("#p2").text(data.practitionerId || "Unknown");
+    $("#p-1").text(data.name[0].fullName || "Unknown");
+    $("#p-2").text(data.practitionerId || "Unknown");
   }
 
   window.drawVisualization = function (p) {
