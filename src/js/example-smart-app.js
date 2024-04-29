@@ -77,6 +77,8 @@
             ret.reject(error);
           });
 
+        let questionnaireId;
+
         fetch(
           baseUrl +
             "/api/smart-on-fhir/external-system/questionnaire-response/" +
@@ -86,6 +88,7 @@
           .then((data) => {
             console.log("Fetched Questionnaire Response data:", data);
             updateQuestionnaireResponse(data);
+            questionnaireId = data[0].questionnaireId;
             ret.resolve(data);
           })
           .catch((error) => {
@@ -109,6 +112,21 @@
             onError();
             ret.reject(error);
           });
+
+        $("#submit-lab-order").click(function () {
+          fetch(baseUrl + "/api/smart-on-fhir/external-system/lab-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              providerNotes: $("#p-3").val(),
+              questionnaireResponseId: questionnaireId,
+              patientId: patientId,
+              providerId: providerId,
+            }),
+          });
+        });
       } else {
         onError();
         ret.reject(new Error("Smart does not have a patient property"));
