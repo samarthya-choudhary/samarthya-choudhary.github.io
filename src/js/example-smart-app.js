@@ -142,7 +142,7 @@
               console.log(result);
               document.getElementById("dialog").showModal();
               $("#modal-text").text(
-                `Lab Order for ${patientName} (ID: ${patientId}) \n has been submitted.`,
+                `Lab Order for ${patientName} (ID: ${patientId})\n\nhas been submitted.`,
               );
             })
             .catch((error) => console.error(error));
