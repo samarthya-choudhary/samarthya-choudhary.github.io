@@ -190,12 +190,17 @@
   }
 
   function updateQuestionnaireResponse(data) {
-    $("#q-1").text(data[0].allergyResponse || "Unknown");
-    $("#q-2").text(data[0].medResponse || "Unknown");
-    $("#q-3").text(data[0].labResponse || "Unknown");
-    $("#q-4").text(data[0].reasonResponse || "Unknown");
-    $("#q-5").text(data[0].patient.firstName || "Unknown");
-    $("#q-6").text(data[0].patient.lastName || "Unknown");
+    $("#q-1").text(
+      (data[0].hasGeneticDisordersResp ? "Yes" : "No") || "Unknown",
+    );
+    $("#q-2").text(data[0].geneticDisordersSpecResp || "Unknown");
+    $("#q-3").text(
+      (data[0].hasFamilyGeneticDisordersResp ? "Yes" : "No") || "Unknown",
+    );
+    $("#q-4").text(data[0].familyGeneticDisordersDescResp || "Unknown");
+    $("#q-5").text(data[0].geneticTestingReasonResp || "Unknown");
+    $("#q-6").text(data[0].expectationsResp || "Unknown");
+    $("#q-7").text(data[0].familiarityResp || "Unknown");
   }
 
   function updateProviderFields(data, providerId) {
