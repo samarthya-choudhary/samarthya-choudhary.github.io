@@ -36,6 +36,7 @@
             console.log("Fetched data:", data);
             data.patientId = patientId;
             updatePatientFields(data);
+            patientName = data.Name;
             ret.resolve(data);
           })
           .catch((error) => {
@@ -78,6 +79,7 @@
           });
 
         let questionnaireId;
+        let patientName;
 
         fetch(
           baseUrl +
@@ -138,7 +140,10 @@
             .then((response) => response.text())
             .then((result) => {
               console.log(result);
-              alert("Lab Order Submitted Successfully");
+              document.getElementById("dialog").showModal();
+              $("#modal-text").text(
+                `Lab Order for ${patientName} (ID: ${patientId})<br />has been submitted.`,
+              );
             })
             .catch((error) => console.error(error));
         });

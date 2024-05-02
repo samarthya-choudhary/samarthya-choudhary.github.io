@@ -7,6 +7,14 @@ body {
   margin: 0;
 }
 
+#dialog {
+  display: none; /* Hide the dialog by default */
+}
+
+#dialog[open] {
+  display: flex; /* Show the dialog when it's open */
+}
+
 #holder {
   display: none;
 }
