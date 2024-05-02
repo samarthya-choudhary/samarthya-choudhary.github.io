@@ -181,9 +181,9 @@
     data.forEach((element) => {
       $("#family-history").append(
         `<tr class="border-b bg-white">
-        <td class="px-4 py-2 font-inter font-normal text-lg">${element.name}</td>
-        <td class="px-4 py-2 font-inter font-normal text-lg">${element.relationship}</td>
-        <td class="px-4 py-2 font-inter font-normal text-lg">${element.conditions.join(", ")}</td>
+        <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.name}</td>
+        <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.relationship}</td>
+        <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.conditions.join(", ")}</td>
       </tr>`,
       );
     });
