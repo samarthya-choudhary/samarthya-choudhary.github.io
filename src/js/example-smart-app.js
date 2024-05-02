@@ -142,7 +142,7 @@
               console.log(result);
               document.getElementById("dialog").showModal();
               $("#modal-text").text(
-                `Lab Order for ${patientName} (ID: ${patientId})<br />has been submitted.`,
+                `Lab Order for ${patientName} (ID: ${patientId}) \n has been submitted.`,
               );
             })
             .catch((error) => console.error(error));
@@ -156,6 +156,10 @@
     FHIR.oauth2.ready(onReady, onError);
     return ret.promise();
   };
+
+  document.getElementById("close").addEventListener("click", function () {
+    document.getElementById("dialog").close();
+  });
 
   function updatePatientFields(data) {
     $("#patient-name").text(data.Name || "Unknown");
