@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Example-SMART-App</title>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./src/css/example-smart-app.css"
+    />
+    <link rel="stylesheet" href="./src/output.css" />
+    <!--
+      Temporarily disable cerner-smart-embeddable-lib
+      <link rel='stylesheet' type='text/css' href='./lib/css/cerner-smart-embeddable-lib-1.0.0.min.css'>
+    -->
+  </head>
+
+  <body class="bg-azo_gray">
+    <div id="errors"></div>
+    <div id="loading" class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    <div id="holder" class="">
+      <div class="p-8">
+        <h1 class="text-2xl font-semibold">Lab Order Interaction</h1>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Patient Information (from EMR Patient Chart)
+          </h1>
+          <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Patient Name</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-policy-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-policy-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-name"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Date of Birth</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-policy-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-policy-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-dob"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Sex at Birth</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-policy-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-policy-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-sex"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Address</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-address-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-address-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-address"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Patient ID</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-id-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-id-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-id"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Phone Number</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-phone-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-phone-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-phone"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy ID</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="patient-policy-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="patient-policy-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="patient-policy"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy Status</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="policy-status-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="policy-status-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="policy-status"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <div class="flex justify-between">
+                <h1 class="text-sm font-normal">Policy Payor</h1>
+                <div
+                  class="rounded-full bg-azo_purple px-3 py-1"
+                  id="policy-payer-label"
+                >
+                  <h2
+                    class="text-xs font-normal text-azo_darkPurple"
+                    id="policy-payer-label-text"
+                  >
+                    EHR
+                  </h2>
+                </div>
+              </div>
+              <h1
+                id="policy-payer"
+                class="mt text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Required JS files to enable this page to embed within an MPage -->
+    <!--
+      Temporarily disable cerner-smart-embeddable-lib
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js'></script>
+      <script src='./lib/js/cerner-smart-embeddable-lib-1.0.0.min.js'></script>
+    -->
+
+    <!-- Application-level javascript-->
+    <script src="./src/js/example-smart-app.js"></script>
+
+    <!-- FHIR Client JS Library -->
+    <script src="./lib/js/fhir-client-v0.1.12.js"></script>
+
+    <!-- Prevent session bleed caused by single threaded embedded browser and sessionStorage API -->
+    <!-- https://github.com/cerner/fhir-client-cerner-additions -->
+    <script src="./lib/js/fhir-client-cerner-additions-1.0.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+      extractData().then(
+        //Display Patient Demographics and Observations if extractData was success
+        function (p) {
+          drawVisualization(p);
+        },
+
+        //Display 'Failed to call FHIR Service' if extractData failed
+        function () {
+          $("#loading").hide();
+          $("#errors").html("<p> Failed to call FHIR Service </p>");
+        },
+      );
+    </script>
+  </body>
+</html>

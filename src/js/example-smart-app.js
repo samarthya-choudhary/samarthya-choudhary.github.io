@@ -158,7 +158,9 @@
   };
 
   document.getElementById("close").addEventListener("click", function () {
-    document.getElementById("dialog").close();
+    // document.getElementById("dialog").close();
+    //navigate to lab-result-status.html
+    window.location.href = "lab-result-status.html";
   });
 
   function updatePatientFields(data) {
