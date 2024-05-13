@@ -15,9 +15,9 @@ body {
   display: flex; /* Show the dialog when it's open */
 }
 
-#holder {
+/* #holder {
   display: none;
-}
+} */
 
 .spinner {
   margin: 100px auto 0;

@@ -632,6 +632,10 @@ body {
   margin-top: 0.5rem;
 }
 
+.mt-5{
+  margin-top: 1.25rem;
+}
+
 .mt-8{
   margin-top: 2rem;
 }
@@ -749,6 +753,17 @@ body {
   row-gap: 2rem;
 }
 
+.divide-y > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.divide-azo_pink > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-opacity: 1;
+  border-color: rgb(155 138 251 / var(--tw-divide-opacity));
+}
+
 .truncate{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -782,6 +797,11 @@ body {
 .border-black{
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.border-azo_pink{
+  --tw-border-opacity: 1;
+  border-color: rgb(155 138 251 / var(--tw-border-opacity));
 }
 
 .bg-azo_gray{
@@ -886,6 +906,10 @@ body {
   line-height: 1rem;
 }
 
+.font-bold{
+  font-weight: 700;
+}
+
 .font-medium{
   font-weight: 500;
 }
@@ -925,6 +949,11 @@ body {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-black{
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
 .underline{
   text-decoration-line: underline;
 }
@@ -938,6 +967,11 @@ body {
 .ring-\[\#919BF3\]{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(145 155 243 / var(--tw-ring-opacity));
+}
+
+.ring-azo_pink{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(155 138 251 / var(--tw-ring-opacity));
 }
 
 .blur{
@@ -971,6 +1005,14 @@ body {
   --tw-backdrop-blur: blur(12px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+
+.last\:border:last-child{
+  border-width: 1px;
+}
+
+.last\:border-0:last-child{
+  border-width: 0px;
 }
 
 .disabled\:cursor-not-allowed:disabled{

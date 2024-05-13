@@ -7,7 +7,8 @@ module.exports = {
         azo_gray: "#F3F3F3",
         azo_purple: "#3537E84D",
         azo_darkPurple: "#383CF0",
-        azo_darkGray :"#768089"
+        azo_darkGray :"#768089",
+        azo_pink :"#9B8AFB"
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],

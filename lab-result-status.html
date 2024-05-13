@@ -214,6 +214,87 @@
             </div>
           </div>
         </div>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Patient Answered Questionnaire (from external system)
+          </h1>
+          <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
+            <div class="">
+              <h1 class="text-sm font-normal">
+                EMR Lab Order ID
+              </h1>
+              <h1
+                id="LOD-1"
+                class="mt-2 text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">
+                External Lab Order ID
+              </h1>
+              <h1
+                id="LOD-2"
+                class="mt-2 text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">
+                Lab Status
+              </h1>
+              <h1
+                id="LOD-3"
+                class="mt-2 text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">
+                Ordering Provider Name
+              </h1>
+              <h1
+                id="LOD-4"
+                class="mt-2 text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">
+                Ordering Provider ID
+              </h1>
+              <h1
+                id="LOD-5"
+                class="mt-2 text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+            <div class="">
+              <h1 class="text-sm font-normal">
+                Order Date
+              </h1>
+              <h1
+                id="LOD-6"
+                class="mt-2 text-lg font-normal text-azo_darkGray"
+              ></h1>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 w-full rounded-lg bg-white p-6">
+          <h1 class="text-lg font-semibold">
+            Lab Order Results
+          </h1>
+          <div class="flex items-center mt-8">
+            <h2 class="font-semibold text-base">Lab Test Date:</h2>&nbsp;<h2 class="font-normal text-base">date</h2>
+          </div>
+          <table class="mt-5 table-auto border-collapse w-full last:border-0 ring-1 ring-azo_pink rounded-md" id="lab-order-result">
+            <tr class="border-b border-azo_pink last:border-0">
+              <th class="px-4 py-2 font-inter text-sm font-bold">Gene</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">Disease</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">Mode of Inheritance</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">Variant</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">cDNA</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">Zygosity</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">Inherited Form</th>
+              <th class="px-4 py-2 font-inter text-sm font-bold">Classification</th>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
     <!-- Required JS files to enable this page to embed within an MPage -->
@@ -224,7 +305,7 @@
     -->
 
     <!-- Application-level javascript-->
-    <script src="./src/js/example-smart-app.js"></script>
+    <script src="./src/js/lab-result-status.js"></script>
 
     <!-- FHIR Client JS Library -->
     <script src="./lib/js/fhir-client-v0.1.12.js"></script>
