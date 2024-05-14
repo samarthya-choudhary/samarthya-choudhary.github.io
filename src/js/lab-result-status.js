@@ -122,7 +122,7 @@
 
   function updateLabOrderDetails(data) {
     $("#LOD-1").text("EMRLAB-1");
-    $("#LOD-2").text(data.id);
+    $("#LOD-2").text("EXTLAB0123");
     $("#LOD-3").text(data.status);
     $("#LOD-4").text(data.Provider.firstName);
     $("#LOD-5").text(data.Provider.externalId);
