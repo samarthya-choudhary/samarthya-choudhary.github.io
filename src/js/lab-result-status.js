@@ -46,6 +46,22 @@
           });
 
         fetch(
+          baseUrl + "/api/smart-on-fhir/ehr-data/coverage/" + patientId,
+          requestOptions,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched Policy data:", data);
+            updatePolicyFields(data);
+            ret.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching policy data:", error);
+            onError();
+            ret.reject(error);
+          });
+
+        fetch(
           baseUrl + "/api/smart-on-fhir/external-system/lab-order/patient/" + patientId,
           requestOptions,
         )
@@ -53,6 +69,23 @@
           .then((data) => {
             console.log("Fetched Policy data:", data);
             updateLabOrderDetails(data[0]);
+            labOrderId = data[0].id;
+            ret.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching policy data:", error);
+            onError();
+            ret.reject(error);
+          });
+
+        fetch(
+          baseUrl + "/api/smart-on-fhir/external-system/lab-order-result/lab-order/" + labOrderId,
+          requestOptions,
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched Policy data:", data);
+            updateLabOrderResult(data);
             ret.resolve(data);
           })
           .catch((error) => {
@@ -100,14 +133,14 @@
     data.forEach((element) => {
       $("#lab-order-result").append(
         `<tr class="border-b border-azo_pink last:border-0">
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.one}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.two}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.three}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.four}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.five}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.six}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.seven}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.eight}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.gene}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.disease}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.modeOfInheritance}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.variant}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.cdna}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.zygosity}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.inheritedFrom}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.classification}</td>
       </tr>`,
       );
     });
