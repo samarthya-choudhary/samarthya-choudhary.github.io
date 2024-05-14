@@ -52,7 +52,7 @@
           .then((response) => response.json())
           .then((data) => {
             console.log("Fetched Policy data:", data);
-            updateLabOrderDetails(data);
+            updateLabOrderDetails(data[0]);
             ret.resolve(data);
           })
           .catch((error) => {
@@ -89,11 +89,11 @@
 
   function updateLabOrderDetails(data) {
     $("#LOD-1").text("EMRLAB-1");
-    $("#LOD-2").text(data[0].id);
-    $("#LOD-3").text(data[0].status);
-    $("#LOD-4").text(data[0].Provider.firstName + " " + data[0].Provider.lastName);
-    $("#LOD-5").text(data[0].Provider.externalId);
-    $("#LOD-6").text(data[0].createdAt);
+    $("#LOD-2").text(data.id);
+    $("#LOD-3").text(data.status);
+    $("#LOD-4").text(data.Provider.firstName);
+    $("#LOD-5").text(data.Provider.externalId);
+    $("#LOD-6").text(data.createdAt);
   }
 
   function updateLabOrderResult(data) {
