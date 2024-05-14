@@ -79,7 +79,7 @@
           });
 
         fetch(
-          baseUrl + "/api/smart-on-fhir/external-system/lab-order-result/lab-order/" + labOrderId,
+          baseUrl + "/api/smart-on-fhir/external-system/lab-order-result/lab-order/2",
           requestOptions,
         )
           .then((response) => response.json())
