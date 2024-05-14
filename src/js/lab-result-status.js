@@ -46,14 +46,13 @@
           });
 
         fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/coverage/" + patientId,
+          baseUrl + "/api/smart-on-fhir/external-system/lab-order/patient/" + patientId,
           requestOptions,
         )
           .then((response) => response.json())
           .then((data) => {
             console.log("Fetched Policy data:", data);
-            updatePolicyFields(data);
-
+            updateLabOrderDetails(data);
             ret.resolve(data);
           })
           .catch((error) => {
@@ -61,9 +60,6 @@
             onError();
             ret.reject(error);
           });
-
-
-
       } else {
         onError();
         ret.reject(new Error("Smart does not have a patient property"));
@@ -92,12 +88,12 @@
   }
 
   function updateLabOrderDetails(data) {
-    $("#LOD-1").text("API CALL");
-    $("#LOD-2").text("API CALL");
-    $("#LOD-3").text("API CALL");
-    $("#LOD-4").text("API CALL");
-    $("#LOD-5").text("API CALL");
-    $("#LOD-6").text("API CALL");
+    $("#LOD-1").text("EMRLAB-1");
+    $("#LOD-2").text(data.id);
+    $("#LOD-3").text(data.status);
+    $("#LOD-4").text(data.Provider.firstName + " " + data.Provider.lastName);
+    $("#LOD-5").text(data.Provider.externalId);
+    $("#LOD-6").text(data.createdAt);
   }
 
   function updateLabOrderResult(data) {
