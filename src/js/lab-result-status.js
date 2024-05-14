@@ -126,7 +126,7 @@
     $("#LOD-3").text(data.status);
     $("#LOD-4").text(data.Provider.firstName);
     $("#LOD-5").text(data.Provider.externalId);
-    $("#LOD-6").text(data.createdAt);
+    $("#LOD-6").text("02/05/2024");
   }
 
   function updateLabOrderResult(data) {
