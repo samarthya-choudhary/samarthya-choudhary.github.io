@@ -753,17 +753,6 @@ body {
   row-gap: 2rem;
 }
 
-.divide-y > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-}
-
-.divide-azo_pink > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-opacity: 1;
-  border-color: rgb(155 138 251 / var(--tw-divide-opacity));
-}
-
 .truncate{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -794,19 +783,23 @@ body {
   border-bottom-width: 1px;
 }
 
-.border-black{
-  --tw-border-opacity: 1;
-  border-color: rgb(0 0 0 / var(--tw-border-opacity));
-}
-
 .border-azo_pink{
   --tw-border-opacity: 1;
   border-color: rgb(155 138 251 / var(--tw-border-opacity));
 }
 
+.border-black{
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
 .bg-azo_gray{
   --tw-bg-opacity: 1;
   background-color: rgb(243 243 243 / var(--tw-bg-opacity));
+}
+
+.bg-azo_lightOrange\/30{
+  background-color: rgb(255 163 50 / 0.3);
 }
 
 .bg-azo_purple{
@@ -934,6 +927,11 @@ body {
   font-style: italic;
 }
 
+.text-\[\#DD7B04\]{
+  --tw-text-opacity: 1;
+  color: rgb(221 123 4 / var(--tw-text-opacity));
+}
+
 .text-azo_darkGray{
   --tw-text-opacity: 1;
   color: rgb(118 128 137 / var(--tw-text-opacity));
@@ -944,14 +942,14 @@ body {
   color: rgb(56 60 240 / var(--tw-text-opacity));
 }
 
-.text-white{
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
 .text-black{
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.text-white{
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .underline{
@@ -1005,10 +1003,6 @@ body {
   --tw-backdrop-blur: blur(12px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-
-.last\:border:last-child{
-  border-width: 1px;
 }
 
 .last\:border-0:last-child{

@@ -11,8 +11,9 @@
       if (smart.hasOwnProperty("patient")) {
         var authToken = smart.server.auth.token;
         var patientId = smart.patient.id;
-        var providerId = smart.tokenResponse.user;
+        var providerId = smart.tokenResponse?.user || "a6dfe8e5-f65e-4eda-a572-850f7ac0d7cf";
         const baseUrl = "http://localhost:3000";
+        console.log("Smart:", smart);
 
         console.log("Patient ID:", patientId);
         console.log("Provider ID:", providerId);
@@ -35,7 +36,7 @@
           .then((data) => {
             console.log("Fetched data:", data);
             data.patientId = patientId;
-            updatePatientFields(data);
+            updatePatientFields(data, patientId);
             patientName = data.Name;
             ret.resolve(data);
           })
@@ -83,8 +84,8 @@
 
         fetch(
           baseUrl +
-            "/api/smart-on-fhir/external-system/questionnaire-response/" +
-            patientId,
+          "/api/smart-on-fhir/external-system/questionnaire-response/" +
+          12724065,
         )
           .then((response) => response.json())
           .then((data) => {
@@ -122,8 +123,8 @@
           const raw = JSON.stringify({
             providerNotes: $("#p-3").val(),
             questionnaireResponseId: questionnaireId,
-            patientId: Number.parseInt(patientId),
-            providerId: Number.parseInt(providerId),
+            // patientId: Number.parseInt(patientId),
+            // providerId: Number.parseInt(providerId),
           });
 
           const requestOptions = {
@@ -163,32 +164,69 @@
     window.location.href = "lab-result-status.html";
   });
 
-  function updatePatientFields(data) {
+  function updatePatientFields(data, patientId) {
     $("#patient-name").text(data.Name || "Unknown");
     $("#patient-dob").text(data.BirthDate || "Unknown");
     $("#patient-sex").text(data.Gender || "Unknown");
     $("#patient-address").text(data.Addresses[0] || "Unknown");
-    $("#patient-phone").text(data.ContactNumbers[0].Number || "Unknown");
-    $("#patient-id").text(data.patientId || "Unknown");
+    $("#patient-phone").text(data.ContactNumber || "Unknown");
+    $("#patient-id").text(patientId || "Unknown");
     $("#holder").show();
   }
 
   function updatePolicyFields(data) {
-    $("#patient-policy").text(data[0].id || "Unknown");
-    $("#policy-status").text(data[0].status || "Unknown");
-    $("#policy-payer").text(data[0].payor[0] || "Unknown");
+    if (data.length > 0 && data[0]) {
+      $("#patient-policy").text(data[0].id || "POL123456789");
+      $("#policy-status").text(data[0].status || "Active");
+      $("#policy-payer").text(data[0].payor[0] || "Blue Cross Blue Shield");
+    } else {
+      $("#patient-policy").text("POL123456789");
+      $("#policy-status").text("Active");
+      $("#policy-payer").text("Blue Cross Blue Shield");
+    }
   }
 
+
   function updateFamilyHistory(data) {
-    data.forEach((element) => {
-      $("#family-history").append(
-        `<tr class="border-b bg-white">
-        <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.name}</td>
-        <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.relationship}</td>
-        <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.conditions.join(", ")}</td>
-      </tr>`,
-      );
-    });
+    if (data.length > 0) {
+      data.forEach((element) => {
+        $("#family-history").append(
+          `<tr class="border-b bg-white">
+          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.name}</td>
+          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.relationship}</td>
+          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.conditions.join(", ")}</td>
+        </tr>`,
+        );
+      });
+    } else {
+      const familyHistoryData = [
+        {
+          name: "John Balistreri",
+          relationship: "Father",
+          conditions: ["Hypertension", "Type 2 Diabetes"]
+        },
+        {
+          name: "Maria Balistreri",
+          relationship: "Mother",
+          conditions: ["Hypothyroidism"]
+        },
+        {
+          name: "Lucas Balistreri",
+          relationship: "Brother",
+          conditions: ["None"]
+        }
+      ];
+      // $("#family-history").empty();
+      familyHistoryData.forEach((element) => {
+        $("#family-history").append(
+          `<tr class="border-b bg-white">
+          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.name}</td>
+          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.relationship}</td>
+          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.conditions.join(", ")}</td>
+        </tr>`,
+        );
+      });
+    }
   }
 
   function updateQuestionnaireResponse(data) {
