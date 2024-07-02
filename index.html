@@ -36,6 +36,35 @@
       Done
     </button>
   </dialog>
+  <dialog id="submit-external-system-dialog"
+    class="shadow-3xl flex h-[438px] w-[632px] flex-col rounded-xl bg-white backdrop:bg-black/50 backdrop:backdrop-blur-md">
+    <div class="p-6 w-full border-b border-azo_pink">
+      <h1 class="font-inter font-semibold text-lg text-left">Submit to External System</h1>
+      <h1 class="font-inter font-normal text-sm text-azo_lightGray text-left">Select the options you’d like to submit to the external system</h1>
+    </div>
+    <div class="py-5 px-6 flex flex-col">
+      <div class="pt-6">
+        <input type="checkbox" name="patinet-information" class="size-4" id="patinet-information">
+        <label for="patinet-information" class="font-inter font-normal text-lg text-black ml-2">Patient Information (from EMR patient chart)</label>
+      </div>
+      <div class="pt-6">
+        <input type="checkbox" name="prescription-information" class="size-4" id="prescription-information">
+        <label for="prescription-information" class="font-inter font-normal text-lg text-black ml-2">Prescription Information</label>
+      </div>
+      <div class="pt-6">
+        <input type="checkbox" name="person-information" class="size-4" id="person-information">
+        <label for="person-information" class="font-inter font-normal text-lg text-black ml-2">Related Person Information</label>
+      </div>
+    </div>
+    <div class="flex w-full items-center justify-end pt-8 pb-6 pr-6">
+      <button id="cancel" class="mt-8 rounded-md mr-3 border border-black px-6 py-2 font-inter text-base font-medium">
+        Cancel 
+      </button>
+      <button id="confirm" class="mt-8 rounded-md  px-6 py-2 font-inter text-base font-medium bg-azo_lightPurple text-white">
+        Confirm 
+      </button>
+    </div>
+  </dialog>
   <div id="holder" class="">
     <div class="p-8">
       <h1 class="text-2xl font-semibold" style="text-align: center;">Lab Order Interaction</h1>
@@ -147,99 +176,82 @@
       </div>
       <div class="mt-8 w-full rounded-lg bg-white p-6">
         <h1 class="text-lg font-semibold">
-          Patient Family History ( from EMR )
+          Pharmaceutical Information
         </h1>
-        <table class="mt-8 table-auto border-collapse" id="family-history">
-          <tr class="border-b">
-            <th class="px-4 py-2 font-inter text-lg font-normal">Name</th>
-            <th class="px-4 py-2 font-inter text-lg font-normal">Relation</th>
-            <th class="px-4 py-2 font-inter text-lg font-normal">
-              Condition
+        <table class="mt-8 table-auto border-collapse w-full last:border-0 ring-1 ring-azo_pink rounded-[4px]" id="pharmaceutical-information">
+          <tr class="border-b border-azo_pink last:border-0">
+            <th class="px-4 py-2 font-inter text-sm font-bold">Medication</th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">Prescribed by</th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Dosage
             </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Timing
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Route
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Status
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Prescription Date
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Refills
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Reason for Prescription
+            </th>
+
           </tr>
-          <!-- <tr class="border-b bg-white">
-              <td class="px-4 py-2">John Doe</td>
-              <td class="px-4 py-2">Father</td>
-              <td class="px-4 py-2">Diabetes</td>
-            </tr>
-            <tr class="border-b bg-white">
-              <td class="px-4 py-2">John Doe</td>
-              <td class="px-4 py-2">Father</td>
-              <td class="px-4 py-2">Diabetes</td>
-            </tr> -->
+          <!-- <tr class="border-b border-azo_pink last:border-0">
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">John Doe</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Father</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+            </tr>   -->
         </table>
       </div>
       <div class="mt-8 w-full rounded-lg bg-white p-6">
         <h1 class="text-lg font-semibold">
-          Patient Answered Questionnaire (from external system)
+          Pharmaceutical Information
         </h1>
-        <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
-          <div class="">
-            <h1 class="text-lg font-normal">
-              Do you have a personal history of genetic disorders? (Yes/No)
-            </h1>
-            <h1 id="q-1" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="text-lg font-normal">
-              If yes, please specify which genetic disorders.
-            </h1>
-            <h1 id="q-2" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="text-lg font-normal">
-              Do you have a family history of genetic disorders? (Yes/No)
-            </h1>
-            <h1 id="q-3" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="text-lg font-normal">
-              If yes, which family members and what conditions?
-            </h1>
-            <h1 id="q-4" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="text-lg font-normal">
-              Why has genetic testing been recommended for you?
-            </h1>
-            <h1 id="q-5" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="text-lg font-normal">
-              What are your expectations from the genetic testing results?
-            </h1>
-            <h1 id="q-6" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="text-lg font-normal">
-              How familiar are you with genetic testing processes? (Not
-              familiar, Somewhat familiar, Very familiar)
-            </h1>
-            <h1 id="q-7" class="mt-2 text-lg font-normal text-azo_darkGray"></h1>
-          </div>
-        </div>
-      </div>
-      <div class="mt-8 w-full rounded-lg bg-white p-6">
-        <h1 class="text-lg font-semibold">
-          Provider Order Submission Input (stored in EMR and/or external
-          system)
-        </h1>
-        <div class="mt-8 grid grid-cols-3 gap-x-8 gap-y-8">
-          <div class="">
-            <h1 class="font-lg text-sm">Provider Name</h1>
-            <h1 id="p-1" class="font-lg mt-2 text-lg text-azo_darkGray"></h1>
-          </div>
-          <div class="">
-            <h1 class="font-lg text-sm">Provider ID</h1>
-            <h1 id="p-2" class="font-lg mt-2 text-lg text-azo_darkGray"></h1>
-          </div>
-          <div class="col-span-3">
-            <h1 class="font-lg text-sm">Provider Notes</h1>
-            <textarea id="p-3"
-              class="font-lg mt-2 h-24 w-full rounded-lg p-2 text-lg text-azo_darkGray ring-1 ring-[#919BF3]"
-              placeholder="Enter notes here"></textarea>
-          </div>
-        </div>
+        <table class="mt-8 table-auto border-collapse w-full last:border-0 ring-1 ring-azo_pink rounded-[4px]" id="pharmaceutical-information">
+          <tr class="border-b border-azo_pink last:border-0">
+            <th class="px-4 py-2 font-inter text-sm font-bold">Name</th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">Relationship</th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Contact
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Address
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Gender
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Date of Birth
+            </th>
+            <th class="px-4 py-2 font-inter text-sm font-bold">
+              Relevant Period
+            </th>      
+          </tr>
+          <!-- <tr class="border-b border-azo_pink last:border-0">
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">John Doe</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Father</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+              <td class="px-4 py-2 font-inter text-sm font-normal text-black">Diabetes</td>
+            </tr>   -->
+        </table>
       </div>
       <div class="mt-8 flex w-full items-center justify-end gap-8">
         <button class="rounded-md border border-black px-6 py-3 font-inter text-base font-medium">

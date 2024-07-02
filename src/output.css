@@ -7,7 +7,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
 /*
-! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -620,8 +620,12 @@ body {
   position: relative;
 }
 
-.col-span-3{
-  grid-column: span 3 / span 3;
+.ml-2{
+  margin-left: 0.5rem;
+}
+
+.mr-3{
+  margin-right: 0.75rem;
 }
 
 .mt-10{
@@ -684,8 +688,9 @@ body {
   display: none;
 }
 
-.h-24{
-  height: 6rem;
+.size-4{
+  width: 1rem;
+  height: 1rem;
 }
 
 .h-\[438px\]{
@@ -759,6 +764,10 @@ body {
   white-space: nowrap;
 }
 
+.rounded-\[4px\]{
+  border-radius: 4px;
+}
+
 .rounded-full{
   border-radius: 9999px;
 }
@@ -798,10 +807,6 @@ body {
   background-color: rgb(243 243 243 / var(--tw-bg-opacity));
 }
 
-.bg-azo_lightOrange\/30{
-  background-color: rgb(255 163 50 / 0.3);
-}
-
 .bg-azo_purple{
   background-color: #3537E84D;
 }
@@ -814,6 +819,11 @@ body {
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-azo_lightPurple{
+  --tw-bg-opacity: 1;
+  background-color: rgb(53 55 232 / var(--tw-bg-opacity));
 }
 
 .p-1{
@@ -864,6 +874,31 @@ body {
 .py-3{
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.py-5{
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.pb-6{
+  padding-bottom: 1.5rem;
+}
+
+.pr-6{
+  padding-right: 1.5rem;
+}
+
+.pt-6{
+  padding-top: 1.5rem;
+}
+
+.pt-8{
+  padding-top: 2rem;
+}
+
+.text-left{
+  text-align: left;
 }
 
 .text-center{
@@ -927,11 +962,6 @@ body {
   font-style: italic;
 }
 
-.text-\[\#DD7B04\]{
-  --tw-text-opacity: 1;
-  color: rgb(221 123 4 / var(--tw-text-opacity));
-}
-
 .text-azo_darkGray{
   --tw-text-opacity: 1;
   color: rgb(118 128 137 / var(--tw-text-opacity));
@@ -940,6 +970,11 @@ body {
 .text-azo_darkPurple{
   --tw-text-opacity: 1;
   color: rgb(56 60 240 / var(--tw-text-opacity));
+}
+
+.text-azo_lightGray{
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity));
 }
 
 .text-black{
@@ -960,11 +995,6 @@ body {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-}
-
-.ring-\[\#919BF3\]{
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(145 155 243 / var(--tw-ring-opacity));
 }
 
 .ring-azo_pink{
