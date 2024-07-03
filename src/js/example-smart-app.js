@@ -216,7 +216,7 @@
         <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Timing}</td>
         <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Route}</td>
         <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Status}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.PrescriptionDate}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${formatDate(element.PrescriptionDate)}</td>
         <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RefillsAllowed}</td>
         <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.ReasonForPrescription}</td>
       </tr>`,
@@ -304,6 +304,15 @@
       });
     }
   }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
 
   function updateProviderFields(data, providerId) {
     $("#p-1").text(data.name[0].fullName || "Unknown");
