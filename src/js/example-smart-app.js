@@ -15,6 +15,10 @@
         const baseUrl = "http://localhost:3000";
         console.log("Smart:", smart);
 
+        let patientData;
+        let medicationData;
+        let relatedPersonData;
+
         console.log("Patient ID:", patientId);
         console.log("Provider ID:", providerId);
         console.log("Auth Token:", authToken);
@@ -38,6 +42,7 @@
             data.patientId = patientId;
             updatePatientFields(data, patientId);
             patientName = data.Name;
+            patientData = data;
             ret.resolve(data);
           })
           .catch((error) => {
@@ -64,38 +69,35 @@
           });
 
         fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/family-history/" + patientId,
+          baseUrl + "/api/smart-on-fhir/ehr-data/medication/" + patientId,
           requestOptions,
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log("Fetched Family History data:", data);
-            updateFamilyHistory(data);
+            console.log("Fetched Medication data:", data);
+            updateMedicationFields(data);
+            medicationData = data;
             ret.resolve(data);
           })
           .catch((error) => {
-            console.error("Error fetching family history data:", error);
+            console.error("Error fetching medication data:", error);
             onError();
             ret.reject(error);
           });
 
-        let questionnaireId;
-        let patientName;
-
         fetch(
-          baseUrl +
-          "/api/smart-on-fhir/external-system/questionnaire-response/" +
-          12724065,
+          baseUrl + "/api/smart-on-fhir/ehr-data/related-person/" + patientId,
+          requestOptions,
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log("Fetched Questionnaire Response data:", data);
-            updateQuestionnaireResponse(data);
-            questionnaireId = data[0].questionnaireId;
+            console.log("Fetched Related Person data:", data);
+            updateRelatedPersonFields(data);
+            relatedPersonData = data;
             ret.resolve(data);
           })
           .catch((error) => {
-            console.error("Error fetching questionnaire response data:", error);
+            console.error("Error fetching related person data:", error);
             onError();
             ret.reject(error);
           });
@@ -117,36 +119,23 @@
           });
 
         $("#submit-lab-order").click(function () {
-          const myHeaders = new Headers();
-          myHeaders.append("Content-Type", "application/json");
+          document.getElementById("submit-external-system-dialog").showModal();
+        });
 
-          const raw = JSON.stringify({
-            providerNotes: $("#p-3").val(),
-            questionnaireResponseId: questionnaireId,
-            // patientId: Number.parseInt(patientId),
-            // providerId: Number.parseInt(providerId),
-          });
+        $("#cancel").click(function () {
+          document.getElementById("submit-external-system-dialog").close();
+        });
 
-          const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
-          };
-
-          fetch(
-            "http://localhost:3000/api/smart-on-fhir/external-system/lab-order",
-            requestOptions,
-          )
-            .then((response) => response.text())
-            .then((result) => {
-              console.log(result);
+        $("#confirm").click(function () {
+          const dataToSend = collectDataForSubmission(patientData, medicationData, relatedPersonData);
+          sendDataToExternalSystem(dataToSend)
+            .then(response => {
+              console.log("Data successfully sent to the external system", response);
               document.getElementById("dialog").showModal();
-              $("#modal-text").text(
-                `Lab Order for ${patientName} (ID: ${patientId})`,
-              );
             })
-            .catch((error) => console.error(error));
+            .catch(error => {
+              console.error("Failed to send data", error);
+            });
         });
       } else {
         onError();
@@ -159,10 +148,40 @@
   };
 
   document.getElementById("close").addEventListener("click", function () {
-    // document.getElementById("dialog").close();
-    //navigate to lab-result-status.html
     window.location.href = "lab-result-status.html";
   });
+
+  function collectDataForSubmission(patientData, medicationData, relatedPersonData) {
+    let data = {};
+    if (document.getElementById("patient-information").checked) {
+      data.patientInfo = patientData;
+    }
+    if (document.getElementById("prescription-information").checked) {
+      data.prescriptionInfo = medicationData;
+    }
+    if (document.getElementById("person-information").checked) {
+      data.relatedPersonInfo = relatedPersonData;
+    }
+    return data;
+  }
+
+  function sendDataToExternalSystem(data) {
+    console.log("Sending the following data to the external system:", data);
+    return fetch('https://webhook.site/96f7774c-66d1-467d-bdb7-44a1cce739c3', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return response.text();
+      });
+  }
+
 
   function updatePatientFields(data, patientId) {
     $("#patient-name").text(data.Name || "Unknown");
@@ -186,61 +205,104 @@
     }
   }
 
-
-  function updateFamilyHistory(data) {
+  function updateMedicationFields(data) {
     if (data.length > 0) {
       data.forEach((element) => {
-        $("#family-history").append(
-          `<tr class="border-b bg-white">
-          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.name}</td>
-          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.relationship}</td>
-          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.conditions.join(", ")}</td>
-        </tr>`,
-        );
-      });
-    } else {
-      const familyHistoryData = [
-        {
-          name: "John Balistreri",
-          relationship: "Father",
-          conditions: ["Hypertension", "Type 2 Diabetes"]
-        },
-        {
-          name: "Maria Balistreri",
-          relationship: "Mother",
-          conditions: ["Hypothyroidism"]
-        },
-        {
-          name: "Lucas Balistreri",
-          relationship: "Brother",
-          conditions: ["None"]
-        }
-      ];
-      // $("#family-history").empty();
-      familyHistoryData.forEach((element) => {
-        $("#family-history").append(
-          `<tr class="border-b bg-white">
-          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.name}</td>
-          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.relationship}</td>
-          <td class="px-4 py-2 font-inter text-lg font-normal text-azo_darkGray">${element.conditions.join(", ")}</td>
-        </tr>`,
+        $("#pharmaceutical-information").append(
+          `<tr class="border-b border-azo_pink last:border-0">
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Medication}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.PrescribedBy}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Dosage}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Timing}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Route}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Status}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.PrescriptionDate}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RefillsAllowed}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.ReasonForPrescription}</td>
+      </tr>`,
         );
       });
     }
   }
 
-  function updateQuestionnaireResponse(data) {
-    $("#q-1").text(
-      (data[0].hasGeneticDisordersResp ? "Yes" : "No") || "Unknown",
-    );
-    $("#q-2").text(data[0].geneticDisordersSpecResp || "Unknown");
-    $("#q-3").text(
-      (data[0].hasFamilyGeneticDisordersResp ? "Yes" : "No") || "Unknown",
-    );
-    $("#q-4").text(data[0].familyGeneticDisordersDescResp || "Unknown");
-    $("#q-5").text(data[0].geneticTestingReasonResp || "Unknown");
-    $("#q-6").text(data[0].expectationsResp || "Unknown");
-    $("#q-7").text(data[0].familiarityResp || "Unknown");
+  function updateRelatedPersonFields(data) {
+    if (data.length > 0) {
+      data.forEach((element) => {
+        $("#related-person").append(
+          `<tr class="border-b border-azo_pink last:border-0">
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.name}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Relationship}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Contact}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Address}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Gender}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.DateOfBirth}</td>
+        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RelevantPeriod}</td>
+      </tr>`,
+        );
+      });
+    } else {
+      const relatedPersonData = [
+        {
+          "name": "Margaret MacGyver",
+          "Relationship": "Wife",
+          "Contact": "+15559299218",
+          "Address": "315 Lehner Landing Apt 79, West Springfield Town, Massachusetts 01089, US",
+          "Gender": "Female",
+          "DateOfBirth": "1920-05-15",
+          "RelevantPeriod": "1940-2024"
+        },
+        {
+          "name": "Charles MacGyver",
+          "Relationship": "Son",
+          "Contact": "+15559292222",
+          "Address": "320 Lehner Landing Apt 80, West Springfield Town, Massachusetts 01089, US",
+          "Gender": "Male",
+          "DateOfBirth": "1941-10-09",
+          "RelevantPeriod": "1941-2024"
+        },
+        {
+          "name": "Lucy MacGyver",
+          "Relationship": "Daughter",
+          "Contact": "+15559331234",
+          "Address": "315 Lehner Landing Apt 79, West Springfield Town, Massachusetts 01089, US",
+          "Gender": "Female",
+          "DateOfBirth": "1943-03-22",
+          "RelevantPeriod": "1943-2024"
+        },
+        {
+          "name": "Edward MacGyver",
+          "Relationship": "Brother",
+          "Contact": "+15559294847",
+          "Address": "500 Rural Route, West Springfield Town, Massachusetts 01089, US",
+          "Gender": "Male",
+          "DateOfBirth": "1912-08-15",
+          "RelevantPeriod": "1912-2024"
+        },
+        {
+          "name": "Sophia MacGyver",
+          "Relationship": "Sister",
+          "Contact": "+15559295678",
+          "Address": "315 Lehner Landing Apt 81, West Springfield Town, Massachusetts 01089, US",
+          "Gender": "Female",
+          "DateOfBirth": "1918-11-30",
+          "RelevantPeriod": "1918-2024"
+        }
+      ]
+
+      relatedPersonData.forEach((element) => {
+        $("#related-person").append(
+          `<tr class="border-b border-azo_pink last:border-0">
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.name}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Relationship}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Contact}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Address}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Gender}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.DateOfBirth}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RelevantPeriod}</td>
+          </tr>`
+        );
+      });
+    }
   }
 
   function updateProviderFields(data, providerId) {
