@@ -243,51 +243,51 @@
     } else {
       const relatedPersonData = [
         {
-          "name": "Margaret MacGyver",
-          "Relationship": "Wife",
-          "Contact": "+15559299218",
-          "Address": "315 Lehner Landing Apt 79, West Springfield Town, Massachusetts 01089, US",
+          "name": "Anna Smart",
+          "Relationship": "Mother",
+          "Contact": "+16134132544",
+          "Address": "12345 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
           "Gender": "Female",
-          "DateOfBirth": "1920-05-15",
-          "RelevantPeriod": "1940-2024"
+          "DateOfBirth": "1965-03-22",
+          "RelevantPeriod": "1990-2024"
         },
         {
-          "name": "Charles MacGyver",
-          "Relationship": "Son",
-          "Contact": "+15559292222",
-          "Address": "320 Lehner Landing Apt 80, West Springfield Town, Massachusetts 01089, US",
+          "name": "Robert Smart",
+          "Relationship": "Father",
+          "Contact": "+16134132545",
+          "Address": "12345 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
           "Gender": "Male",
-          "DateOfBirth": "1941-10-09",
-          "RelevantPeriod": "1941-2024"
+          "DateOfBirth": "1963-07-15",
+          "RelevantPeriod": "1990-2024"
         },
         {
-          "name": "Lucy MacGyver",
-          "Relationship": "Daughter",
-          "Contact": "+15559331234",
-          "Address": "315 Lehner Landing Apt 79, West Springfield Town, Massachusetts 01089, US",
-          "Gender": "Female",
-          "DateOfBirth": "1943-03-22",
-          "RelevantPeriod": "1943-2024"
-        },
-        {
-          "name": "Edward MacGyver",
-          "Relationship": "Brother",
-          "Contact": "+15559294847",
-          "Address": "500 Rural Route, West Springfield Town, Massachusetts 01089, US",
-          "Gender": "Male",
-          "DateOfBirth": "1912-08-15",
-          "RelevantPeriod": "1912-2024"
-        },
-        {
-          "name": "Sophia MacGyver",
+          "name": "Emily Smart",
           "Relationship": "Sister",
-          "Contact": "+15559295678",
-          "Address": "315 Lehner Landing Apt 81, West Springfield Town, Massachusetts 01089, US",
+          "Contact": "+16134132546",
+          "Address": "12400 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
           "Gender": "Female",
-          "DateOfBirth": "1918-11-30",
-          "RelevantPeriod": "1918-2024"
+          "DateOfBirth": "1993-09-10",
+          "RelevantPeriod": "1993-2024"
+        },
+        {
+          "name": "James Smart",
+          "Relationship": "Brother",
+          "Contact": "+16134132547",
+          "Address": "12320 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
+          "Gender": "Male",
+          "DateOfBirth": "1988-12-05",
+          "RelevantPeriod": "1988-2024"
+        },
+        {
+          "name": "Grace Smart",
+          "Relationship": "Wife",
+          "Contact": "+16134132548",
+          "Address": "12345 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
+          "Gender": "Female",
+          "DateOfBirth": "1990-05-20",
+          "RelevantPeriod": "2015-2024"
         }
-      ]
+      ];
 
       relatedPersonData.forEach((element) => {
         $("#related-person").append(
@@ -307,12 +307,12 @@
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
-}
+  }
 
   function updateProviderFields(data, providerId) {
     $("#p-1").text(data.name[0].fullName || "Unknown");
