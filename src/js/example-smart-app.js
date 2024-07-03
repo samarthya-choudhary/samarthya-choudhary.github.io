@@ -167,7 +167,7 @@
 
   function sendDataToExternalSystem(data) {
     console.log("Sending the following data to the external system:", data);
-    return fetch('https://webhook.site/96f7774c-66d1-467d-bdb7-44a1cce739c3', {
+    return fetch('https://webhook.site/159e2d59-87a4-49ff-a7b1-33d7a9d3ec7c', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
