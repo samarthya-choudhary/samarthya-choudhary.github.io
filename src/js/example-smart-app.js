@@ -2,122 +2,83 @@
   window.extractData = function () {
     var ret = $.Deferred();
 
-    function onError() {
-      console.log("Loading error", arguments);
-      ret.reject();
+    function onError(error) {
+      console.error("Loading error", error);
+      ret.reject(error);
     }
 
-    function onReady(smart) {
-      if (smart.hasOwnProperty("patient")) {
-        var authToken = smart.server.auth.token;
-        var patientId = smart.patient.id;
-        var providerId = smart.tokenResponse?.user || "a6dfe8e5-f65e-4eda-a572-850f7ac0d7cf";
-        const baseUrl = "http://localhost:3000";
-        console.log("Smart:", smart);
+    function onReady(client) {
+      if (client.hasOwnProperty("patient")) {
+        console.log("client", client);
+        var patientId = client.patient.id;
+        var providerId = client.user?.id || "e6aw6-RJuKO2mbqjleKvgVQ3";
 
-        let patientData;
-        let medicationData;
-        let relatedPersonData;
+        var authToken = client.state.tokenResponse.access_token;
 
         console.log("Patient ID:", patientId);
         console.log("Provider ID:", providerId);
         console.log("Auth Token:", authToken);
 
-        const requestOptions = {
-          method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: "Bearer " + authToken,
-            "Content-Type": "application/json",
-          },
-        };
+        let patientData;
+        let medicationData;
+        let relatedPersonData;
 
-        fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/patient/" + patientId,
-          requestOptions,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Fetched data:", data);
-            data.patientId = patientId;
-            updatePatientFields(data, patientId);
-            patientName = data.Name;
-            patientData = data;
-            ret.resolve(data);
+        // Fetch Patient Data
+        client.request(`Patient/${patientId}`)
+          .then((patient) => {
+            console.log("Fetched patient data:", patient);
+            updatePatientFields(patient);
+            patientData = patient;
           })
           .catch((error) => {
             console.error("Error fetching patient data:", error);
-            onError();
-            ret.reject(error);
           });
 
-        fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/coverage/" + patientId,
-          requestOptions,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Fetched Policy data:", data);
-            updatePolicyFields(data);
-
-            ret.resolve(data);
+        // Fetch Coverage Data
+        client.request(`Coverage?patient=${patientId}`)
+          .then((coverageBundle) => {
+            console.log("Fetched coverage data:", coverageBundle);
+            const coverages = coverageBundle.entry ? coverageBundle.entry.map(entry => entry.resource) : [];
+            updatePolicyFields(coverages);
           })
           .catch((error) => {
-            console.error("Error fetching policy data:", error);
-            onError();
-            ret.reject(error);
+            console.error("Error fetching coverage data:", error);
           });
 
-        fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/medication/" + patientId,
-          requestOptions,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Fetched Medication data:", data);
-            updateMedicationFields(data);
-            medicationData = data;
-            ret.resolve(data);
+        // Fetch MedicationRequest Data
+        client.request(`MedicationRequest?patient=${patientId}`)
+          .then((medBundle) => {
+            console.log("Fetched medication data:", medBundle);
+            const medications = medBundle.entry ? medBundle.entry.map(entry => entry.resource) : [];
+            updateMedicationFields(medications);
+            medicationData = medications;
           })
           .catch((error) => {
             console.error("Error fetching medication data:", error);
-            onError();
-            ret.reject(error);
           });
 
-        fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/related-person/" + patientId,
-          requestOptions,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Fetched Related Person data:", data);
-            updateRelatedPersonFields(data);
-            relatedPersonData = data;
-            ret.resolve(data);
+        // Care Team
+        client.request(`CareTeam?patient=${patientId}`)
+          .then((careTeamBundle) => {
+            console.log("Fetched CareTeam data:", careTeamBundle);
+            const careTeams = careTeamBundle.entry ? careTeamBundle.entry.map(entry => entry.resource) : [];
+            processCareTeams(careTeams);
           })
           .catch((error) => {
-            console.error("Error fetching related person data:", error);
-            onError();
-            ret.reject(error);
+            console.error("Error fetching CareTeam data:", error);
           });
 
-        fetch(
-          baseUrl + "/api/smart-on-fhir/ehr-data/practitioner/" + providerId,
-          requestOptions,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Fetched Provider data:", data);
-            updateProviderFields(data, providerId);
-            ret.resolve(data);
+        // Fetch Practitioner Data
+        client.request(`Practitioner/${providerId}`)
+          .then((practitioner) => {
+            console.log("Fetched practitioner data:", practitioner);
+            updateProviderFields(practitioner);
           })
           .catch((error) => {
-            console.error("Error fetching provider data:", error);
-            onError();
-            ret.reject(error);
+            console.error("Error fetching practitioner data:", error);
           });
 
+        // Event Listeners for UI interactions
         $("#submit-lab-order").click(function () {
           document.getElementById("submit-external-system-dialog").showModal();
         });
@@ -137,19 +98,65 @@
               console.error("Failed to send data", error);
             });
         });
+
+        ret.resolve();
       } else {
-        onError();
-        ret.reject(new Error("Smart does not have a patient property"));
+        onError(new Error("No patient context available"));
       }
     }
 
-    FHIR.oauth2.ready(onReady, onError);
+    FHIR.oauth2.ready().then(onReady).catch(onError);
     return ret.promise();
   };
 
   document.getElementById("close").addEventListener("click", function () {
     window.location.href = "lab-result-status.html";
   });
+
+  function processCareTeams(careTeams) {
+    let relatedPersonIds = new Set();
+
+    careTeams.forEach((careTeam) => {
+      if (careTeam.participant && careTeam.participant.length > 0) {
+        careTeam.participant.forEach((participant) => {
+          if (participant.member && participant.member.reference) {
+            let reference = participant.member.reference;
+            if (reference.startsWith('RelatedPerson/')) {
+              let relatedPersonId = reference.split('/')[1];
+              relatedPersonIds.add(relatedPersonId);
+            }
+          }
+        });
+      }
+    });
+
+    relatedPersonIds = Array.from(relatedPersonIds);
+    fetchRelatedPersons(relatedPersonIds);
+  }
+
+  function fetchRelatedPersons(relatedPersonIds) {
+    let promises = relatedPersonIds.map((id) => {
+      return client.request(`RelatedPerson/${id}`)
+        .then((relatedPerson) => {
+          console.log(`Fetched RelatedPerson ${id}:`, relatedPerson);
+          return relatedPerson;
+        })
+        .catch((error) => {
+          console.error(`Error fetching RelatedPerson ${id}:`, error);
+          return null;
+        });
+    });
+  
+    Promise.all(promises)
+      .then((relatedPersons) => {
+        relatedPersons = relatedPersons.filter(rp => rp !== null);
+        updateRelatedPersonFields(relatedPersons);
+      })
+      .catch((error) => {
+        console.error("Error fetching RelatedPerson resources:", error);
+      });
+  }
+  
 
   function collectDataForSubmission(patientData, medicationData, relatedPersonData) {
     let data = {};
@@ -167,7 +174,7 @@
 
   function sendDataToExternalSystem(data) {
     console.log("Sending the following data to the external system:", data);
-    return fetch('https://webhook.site/159e2d59-87a4-49ff-a7b1-33d7a9d3ec7c', {
+    return fetch('https://webhook.site/your-webhook-url', { // Replace with your actual endpoint
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -182,130 +189,115 @@
       });
   }
 
+  function updatePatientFields(patient) {
+    const name = patient.name && patient.name[0] ? `${patient.name[0].given.join(' ')} ${patient.name[0].family}` : "Unknown";
+    const birthDate = patient.birthDate || "Unknown";
+    const gender = patient.gender || "Unknown";
+    const address = patient.address && patient.address[0] ? formatAddress(patient.address[0]) : "Unknown";
+    const phone = patient.telecom && patient.telecom.find(t => t.system === 'phone') ? patient.telecom.find(t => t.system === 'phone').value : "Unknown";
 
-  function updatePatientFields(data, patientId) {
-    $("#patient-name").text(data.Name || "Unknown");
-    $("#patient-dob").text(data.BirthDate || "Unknown");
-    $("#patient-sex").text(data.Gender || "Unknown");
-    $("#patient-address").text(data.Addresses[0] || "Unknown");
-    $("#patient-phone").text(data.ContactNumber || "Unknown");
-    $("#patient-id").text(patientId || "Unknown");
+    $("#patient-name").text(name);
+    $("#patient-dob").text(birthDate);
+    $("#patient-sex").text(gender);
+    $("#patient-address").text(address);
+    $("#patient-phone").text(phone);
+    $("#patient-id").text(patient.id || "Unknown");
     $("#holder").show();
   }
 
-  function updatePolicyFields(data) {
-    if (data.length > 0 && data[0]) {
-      $("#patient-policy").text(data[0].id || "POL123456789");
-      $("#policy-status").text(data[0].status || "Active");
-      $("#policy-payer").text(data[0].payor[0] || "Blue Cross Blue Shield");
+  function updatePolicyFields(coverages) {
+    if (coverages.length > 0) {
+      const coverage = coverages[0];
+      $("#patient-policy").text(coverage.id || "Unknown");
+      $("#policy-status").text(coverage.status || "Unknown");
+      const payer = coverage.payor && coverage.payor[0] ? coverage.payor[0].display || coverage.payor[0].reference : "Unknown";
+      $("#policy-payer").text(payer);
     } else {
-      $("#patient-policy").text("POL123456789");
-      $("#policy-status").text("Active");
-      $("#policy-payer").text("Blue Cross Blue Shield");
+      $("#patient-policy").text("Unknown");
+      $("#policy-status").text("Unknown");
+      $("#policy-payer").text("Unknown");
     }
   }
 
-  function updateMedicationFields(data) {
-    if (data.length > 0) {
-      data.forEach((element) => {
+  function updateMedicationFields(medications) {
+    if (medications.length > 0) {
+      medications.forEach((medRequest) => {
+        const medication = medRequest.medicationCodeableConcept ? medRequest.medicationCodeableConcept.text : "Unknown Medication";
+        const prescribedBy = medRequest.requester && medRequest.requester.display ? medRequest.requester.display : "Unknown Prescriber";
+        const dosage = medRequest.dosageInstruction && medRequest.dosageInstruction[0] && medRequest.dosageInstruction[0].text ? medRequest.dosageInstruction[0].text : "Unknown Dosage";
+        const timing = medRequest.dosageInstruction && medRequest.dosageInstruction[0] && medRequest.dosageInstruction[0].timing ? formatTiming(medRequest.dosageInstruction[0].timing) : "Unknown Timing";
+        const route = medRequest.dosageInstruction && medRequest.dosageInstruction[0] && medRequest.dosageInstruction[0].route && medRequest.dosageInstruction[0].route.text ? medRequest.dosageInstruction[0].route.text : "Unknown Route";
+        const status = medRequest.status || "Unknown";
+        const prescriptionDate = medRequest.authoredOn || "Unknown";
+        const refills = medRequest.dispenseRequest && medRequest.dispenseRequest.numberOfRepeatsAllowed !== undefined ? medRequest.dispenseRequest.numberOfRepeatsAllowed : "Unknown";
+        const reason = medRequest.reasonCode && medRequest.reasonCode[0] && medRequest.reasonCode[0].text ? medRequest.reasonCode[0].text : "Unknown Reason";
+
         $("#pharmaceutical-information").append(
           `<tr class="border-b border-azo_pink last:border-0">
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Medication}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.PrescribedBy}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Dosage}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Timing}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Route}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Status}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${formatDate(element.PrescriptionDate)}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RefillsAllowed}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.ReasonForPrescription}</td>
-      </tr>`,
-        );
-      });
-    }
-  }
-
-  function updateRelatedPersonFields(data) {
-    if (data.length > 0) {
-      data.forEach((element) => {
-        $("#related-person").append(
-          `<tr class="border-b border-azo_pink last:border-0">
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.name}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Relationship}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Contact}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Address}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Gender}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.DateOfBirth}</td>
-        <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RelevantPeriod}</td>
-      </tr>`,
-        );
-      });
-    } else {
-      const relatedPersonData = [
-        {
-          "name": "Anna Smart",
-          "Relationship": "Mother",
-          "Contact": "+16134132544",
-          "Address": "12345 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
-          "Gender": "Female",
-          "DateOfBirth": "1965-03-22",
-          "RelevantPeriod": "1990-2024"
-        },
-        {
-          "name": "Robert Smart",
-          "Relationship": "Father",
-          "Contact": "+16134132545",
-          "Address": "12345 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
-          "Gender": "Male",
-          "DateOfBirth": "1963-07-15",
-          "RelevantPeriod": "1990-2024"
-        },
-        {
-          "name": "Emily Smart",
-          "Relationship": "Sister",
-          "Contact": "+16134132546",
-          "Address": "12400 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
-          "Gender": "Female",
-          "DateOfBirth": "1993-09-10",
-          "RelevantPeriod": "1993-2024"
-        },
-        {
-          "name": "James Smart",
-          "Relationship": "Brother",
-          "Contact": "+16134132547",
-          "Address": "12320 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
-          "Gender": "Male",
-          "DateOfBirth": "1988-12-05",
-          "RelevantPeriod": "1988-2024"
-        },
-        {
-          "name": "Grace Smart",
-          "Relationship": "Wife",
-          "Contact": "+16134132548",
-          "Address": "12345 MAIN SEE, 2222, KANSAS CITY, MO 64116, US",
-          "Gender": "Female",
-          "DateOfBirth": "1990-05-20",
-          "RelevantPeriod": "2015-2024"
-        }
-      ];
-
-      relatedPersonData.forEach((element) => {
-        $("#related-person").append(
-          `<tr class="border-b border-azo_pink last:border-0">
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.name}</td>
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Relationship}</td>
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Contact}</td>
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Address}</td>
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.Gender}</td>
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.DateOfBirth}</td>
-            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${element.RelevantPeriod}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${medication}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${prescribedBy}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${dosage}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${timing}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${route}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${status}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${formatDate(prescriptionDate)}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${refills}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${reason}</td>
           </tr>`
         );
       });
+    } else {
+      $("#pharmaceutical-information").append(
+        `<tr>
+          <td colspan="9" class="px-4 py-2 font-inter text-sm font-normal text-black">No medication requests found.</td>
+        </tr>`
+      );
     }
   }
 
+  function updateRelatedPersonFields(relatedPersons) {
+    if (relatedPersons.length > 0) {
+      relatedPersons.forEach((person) => {
+        const name = person.name && person.name[0] ? `${person.name[0].given.join(' ')} ${person.name[0].family}` : "Unknown";
+        const relationship = person.relationship && person.relationship[0] && person.relationship[0].coding && person.relationship[0].coding[0] && person.relationship[0].coding[0].display ? person.relationship[0].coding[0].display : "Unknown";
+        const contact = person.telecom && person.telecom[0] ? person.telecom[0].value : "Unknown";
+        const address = person.address && person.address[0] ? formatAddress(person.address[0]) : "Unknown";
+        const gender = person.gender || "Unknown";
+        const birthDate = person.birthDate || "Unknown";
+        const relevantPeriod = person.period ? `${formatDate(person.period.start)} - ${formatDate(person.period.end)}` : "Unknown";
+  
+        $("#related-person").append(
+          `<tr class="border-b border-azo_pink last:border-0">
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${name}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${relationship}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${contact}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${address}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${gender}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${birthDate}</td>
+            <td class="px-4 py-2 font-inter text-sm font-normal text-black">${relevantPeriod}</td>
+          </tr>`
+        );
+      });
+    } else {
+      $("#related-person").append(
+        `<tr>
+          <td colspan="7" class="px-4 py-2 font-inter text-sm font-normal text-black">No related persons found.</td>
+        </tr>`
+      );
+    }
+  }
+  
+
+  function updateProviderFields(practitioner) {
+    const name = practitioner.name && practitioner.name[0] ? `${practitioner.name[0].given.join(' ')} ${practitioner.name[0].family}` : "Unknown";
+    const practitionerId = practitioner.id || "Unknown";
+
+    $("#p-1").text(name);
+    $("#p-2").text(practitionerId);
+  }
+
   function formatDate(dateString) {
+    if (!dateString) return "Unknown";
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -314,12 +306,26 @@
     });
   }
 
-  function updateProviderFields(data, providerId) {
-    $("#p-1").text(data.name[0].fullName || "Unknown");
-    $("#p-2").text(data.practitionerId || "Unknown");
+  function formatAddress(address) {
+    return [
+      address.line ? address.line.join(', ') : '',
+      address.city || '',
+      address.state || '',
+      address.postalCode || '',
+      address.country || ''
+    ].filter(Boolean).join(', ');
   }
 
-  window.drawVisualization = function (p) {
+  function formatTiming(timing) {
+    if (!timing || !timing.repeat) return "Unknown";
+    const repeat = timing.repeat;
+    let frequency = repeat.frequency || '';
+    let period = repeat.period || '';
+    let periodUnit = repeat.periodUnit || '';
+    return `${frequency} times every ${period} ${periodUnit}`;
+  }
+
+  window.drawVisualization = function () {
     $("#holder").show();
     $("#loading").hide();
   };
